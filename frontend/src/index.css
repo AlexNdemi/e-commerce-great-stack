@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@theme{
+  --color-mobilenav:hsl(0 0% 0% / 0.5)
+}
+@custom-variant pn (@media (max-width: 36.875 em));
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="dark"]{
+  --text: rgba(255, 255, 255, 0.87);
+  --background: #242424;
+}
+
+:root[data-theme="light"] {
+  --background: #ffffff;
+  --text: #213547;
+}
+
+body{
+   background-color: var(--background);
+   color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
