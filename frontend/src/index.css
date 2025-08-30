@@ -1,8 +1,14 @@
 @import "tailwindcss";
 @theme{
-  --color-mobilenav:hsl(0 0% 0% / 0.5)
+  --color-mobilenav:hsl(0 0% 0% / 0.5);
+  --color-navlinkDark-text:#d1d5dc;
+  --color-navlinkDark-hover:hsl(50, 100%, 69%);
+  --color-navlinkLight-text:#364153;
+  --color-navlinkLight-hover:hsl(189, 100%, 56%);
+
+
 }
-@custom-variant pn (@media (max-width: 36.875 em));
+@custom-variant pn (@media (max-width: 36.875em));
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -15,18 +21,23 @@
 }
 
 :root[data-theme="dark"]{
-  --text: rgba(255, 255, 255, 0.87);
-  --background: #242424;
+  --text: #ffffffde;
+  --background: #121212; 
+  --navlink-active:hsl(50, 100%, 49%);
+
 }
 
 :root[data-theme="light"] {
   --background: #ffffff;
   --text: #213547;
+  --navlink-text:#364153;
+  --navlink-hover:hsl(189, 100%, 56%);
+  --navlink-active:hsl(189, 100%, 26%);
 }
 
 body{
-   background-color: var(--background);
-   color: var(--text);
+  background-color: var(--background);
+  color: var(--text);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -34,6 +45,24 @@ body{
   :root {
     color: #213547;
     background-color: #ffffff;
+    --background: #ffffff;
+    --text: #213547;
+    
+    --navlink-active:#007185;
+
+  }
+  a[aria-current="page"]{
+    border-bottom-width: 2px;
+    border-color:var(--navlink-active);
+    color: var(--navlink-active);
   }
 }
+
+a[aria-current="page"]{
+  border-bottom-width: 2px;
+  color:var(--navlink-active)
+}
+
+
+
 
