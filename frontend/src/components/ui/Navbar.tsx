@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react'
 import { NavLink,Link } from 'react-router-dom'
-import {assets} from '../assets/frontend_assets/assets.ts'
-import { useTheme } from '../hooks/useTheme.ts';
+import {assets} from '../../assets/frontend_assets/assets.ts'
+import { useTheme } from '../../hooks/useTheme.ts';
 
 
 const Navbar: FC = () => {
@@ -37,7 +37,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/'} 
-              className={`py-2 transition-colors ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'}`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
               onClick={() => setNavOpen(false)}
             >
               HOME
@@ -46,7 +46,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/collection'} 
-              className={`py-2 transition-colors ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'}`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
               onClick={() => setNavOpen(false)}
             >
               COLLECTION
@@ -55,7 +55,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/about'} 
-              className={`py-2 transition-colors ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'}`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
               onClick={() => setNavOpen(false)}
             >
               ABOUT
@@ -64,7 +64,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/contact'} 
-              className={`py-2 transition-colors ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'}`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
               onClick={() => setNavOpen(false)}
             >
               CONTACT

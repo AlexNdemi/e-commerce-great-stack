@@ -60,7 +60,8 @@ body{
 
 a[aria-current="page"]{
   border-bottom-width: 2px;
-  color:var(--navlink-active)
+  color:var(--navlink-active);
+  font-weight:700
 }
 
 
