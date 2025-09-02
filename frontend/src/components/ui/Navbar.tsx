@@ -11,7 +11,10 @@ const Navbar: FC = () => {
   return (
    <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
       <div className='z-30'>
-        <img src={assets.logo} alt="Logo" className='h-10' />
+        <Link to="/">
+          <img src={assets.logo} alt="Logo" className='h-10' />
+        </Link>
+        
       </div>
      
       {/* Overlay that only appears when menu is open on mobile */}

@@ -2,7 +2,7 @@ import {type FC} from 'react'
 import { type product } from '../../context/shop/ShopTypes'
 import { Link } from 'react-router-dom'
 import { useCurrency } from '../../hooks/useCurrency'
-type ProductsItemProp = Pick<product,"_id" | "image" | "name" | "price">
+export type ProductsItemProp = Pick<product,"_id" | "image" | "name" | "price">
 
 const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
 
@@ -17,7 +17,7 @@ const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
           src={image[0]} alt="" />
       </div>
       <p className="pt-3 pb-1 text-sm">{name}</p>
-      <p className="text-sm font-medium">{currency.symbol}{price}</p>  
+      <p className="text-sm font-medium">{currency.symbol} {price}</p>  
     </Link>
   )
 }
