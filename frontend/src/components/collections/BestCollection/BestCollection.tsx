@@ -8,9 +8,12 @@ const BestCollection:FC = () => {
   
   return (
     <>
-      <CollectionHeader description={description} text1={'BEST'} text2={'SELLERS'}/>
-      <ProductCollection collection={bestSellerProducts}/>
-      
+      <CollectionHeader 
+        description={description} 
+        text1={'BEST'} 
+        text2={'SELLERS'}/>
+      <ProductCollection 
+        collection={bestSellerProducts}/>  
     </>
   )
 }

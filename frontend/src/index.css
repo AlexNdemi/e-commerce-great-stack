@@ -5,6 +5,10 @@
   --color-navlinkDark-hover:hsl(50, 100%, 69%);
   --color-navlinkLight-text:#364153;
   --color-navlinkLight-hover:hsl(189, 100%, 56%);
+  --color-textDark-100:#B7CAD4;
+  --color-textDark-900:#EEF1F3;
+  --color-textLight-100:#6a7282;
+  --color-textLight-900:#364153;
 
 
 }
@@ -21,7 +25,7 @@
 }
 
 :root[data-theme="dark"]{
-  --text: #ffffffde;
+  --text: #B7CAD4;
   --background: #121212; 
   --navlink-active:hsl(50, 100%, 49%);
 
@@ -47,8 +51,10 @@ body{
     background-color: #ffffff;
     --background: #ffffff;
     --text: #213547;
-    
     --navlink-active:#007185;
+  --color-textLight-100:#6a7282;
+  --color-textLight-900:#364153; 
+   
 
   }
   a[aria-current="page"]{

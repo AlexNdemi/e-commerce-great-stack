@@ -14,9 +14,10 @@ export const LatestCollection:FC = () => {
     <CollectionHeader 
       description={description}
       text1={'LATEST'}
-      text2={'COLLECTIONs'}
+      text2={'COLLECTIONS'}
     />
-    <ProductCollection collection={latestProducts}/>
+    <ProductCollection 
+      collection={latestProducts}/>
    </>
       
       
