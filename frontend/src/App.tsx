@@ -8,6 +8,8 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import { appRoutes } from "./constants/routes.ts";
 const queryClient = new QueryClient();
 import { ShopProvider } from "./context/shop/ShopProvider.tsx";
+import Navbar from "./components/ui/Navbar.tsx";
+import Footer from "./components/Footer.tsx";
 function App() {
   
 
@@ -19,6 +21,7 @@ function App() {
           <Router>
             <Suspense fallback={<Loader/>}>
               <div className="px-4 sm:px-[5vw] md:px-[7w] lg:px-[9vw]">
+                <Navbar/>
                 <Routes>
                   {appRoutes.map(({ path, element:Component }) => (
                     <Route
@@ -27,6 +30,7 @@ function App() {
                       element={<Component/>} />
                   ))}
                 </Routes>
+                <Footer/>
               </div>
             </Suspense>
           </Router>
