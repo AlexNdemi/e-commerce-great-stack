@@ -1,9 +1,9 @@
 import {type FC} from 'react'
+import CollectionComponent from '../components/collection/CollectionComponent'
 
 const Collection:FC = () => {
   return (
-    <div>
-    </div>
+    <CollectionComponent/>
   )
 }
 

@@ -12,7 +12,7 @@ const Navbar: FC = () => {
    <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
       <div className='z-30'>
         <Link to="/">
-          <img src={assets.logo} alt="Logo" className='h-10' />
+          <img src={assets.logo} alt="Logo" className={`h-10 ${theme === 'dark'?'invert':''}`} />
         </Link>
         
       </div>
@@ -34,7 +34,7 @@ const Navbar: FC = () => {
             fixed top-0 right-0 bottom-0 left-0 flex-col py-24 px-8 text-lg
             transition-transform duration-300 ease-out
             ${navOpen ? 'translate-x-[30%]' : 'translate-x-full md:translate-x-0'}
-            ${theme === 'dark' ? 'bg-[#121212]' : 'bg-white'}
+            ${theme === 'dark' ? 'bg-[#121212]' : 'bg-white'} [&>*]:w-full
           `}
         >
           <li>
