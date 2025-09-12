@@ -2,12 +2,20 @@ import {type FC} from 'react'
 import CollectionFilter from '../filter/CollectionFilter'
 import { useCollectionFilter } from './useCollectionFilter'
 import { useTheme } from '../../hooks/useTheme'
+import Title from '../ui/Title'
+import ProductCollection from '../ui/ProductCollection'
 
 const CollectionComponent:FC = () => {
   const{theme}=useTheme()
-  const {shop,showFilter,setShowFilter,selectedValues,handleCheckboxChange}=useCollectionFilter()
+  const {filteredProducts,
+    showFilter,
+    setShowFilter,
+    category,
+    subCategory,
+    setSortType}=useCollectionFilter()
+
   return (
-    <div className={`flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t ${theme==="dark"?"border-t-gray-500":"border-t-gray-300"}`}>
+    <div className={`flex flex-col dl:flex-row gap-1 sm:gap-10 pt-10 border-t ${theme==="dark"?"border-t-gray-500":"border-t-gray-300"}`}>
       <div className="min-w-60">
        <button 
         className="my-2 text-xl flex items-center cursor-pointer gap-2" 
@@ -42,16 +50,34 @@ const CollectionComponent:FC = () => {
           Category='CATEGORIES'
           values={['Men','Women','Kids']} 
           showFilter={showFilter}
-          selectedValues={selectedValues}
-          handleCheckboxChange={handleCheckboxChange} />
+          selectedValues={category.values}
+          handleCheckboxChange={category.toggleValue} />
         <CollectionFilter 
           id={'type'}
           Category='TYPE'
           values={['Topwear','Bottomwear','Winterwear']} 
           showFilter={showFilter}
-          selectedValues={selectedValues}
-          handleCheckboxChange={handleCheckboxChange} />
+          selectedValues={subCategory.values}
+          handleCheckboxChange={subCategory.toggleValue} />
       </div>
+       <div className="flex-1">
+         <div className="flex justify-between text-base sm:text-2xl mb-4">
+          <Title text1='ALL' text2='COLLECTIONS'/>
+          <select name="" id="" onChange={(e)=>{setSortType(e.target.value)}}className={`border ${theme==="dark"?"border-gray-500":"border-gray-300"}`}>
+            <option value="relevant">
+              Sort by:Relevant
+            </option>
+            <option value="low-high">
+              Sort by:Low to High
+            </option>
+            <option value="high-low">
+              Sort by:High to Low
+            </option>
+          </select>
+         </div>
+         <ProductCollection collection={filteredProducts} overideClassname='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 gap-y-6`'/>
+         
+       </div>
 
     </div>
   )

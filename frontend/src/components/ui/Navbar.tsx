@@ -7,6 +7,7 @@ import { useTheme } from '../../hooks/useTheme.ts';
 const Navbar: FC = () => {
   const [navOpen, setNavOpen] = useState<boolean>(false);
   const{theme,toggleTheme}=useTheme();
+  const [showSearchBar,setShowSearchBar]=useState(false)
   
   return (
    <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
@@ -40,7 +41,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               HOME
@@ -49,7 +50,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/collection'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               COLLECTION
@@ -58,7 +59,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/about'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               ABOUT
@@ -67,7 +68,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/contact'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} hover:font-bold`}
+              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               CONTACT

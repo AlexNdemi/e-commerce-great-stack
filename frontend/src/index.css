@@ -4,7 +4,7 @@
   --color-navlinkDark-text:#d1d5dc;
   --color-navlinkDark-hover:hsl(50, 100%, 69%);
   --color-navlinkLight-text:#364153;
-  --color-navlinkLight-hover:hsl(189, 100%, 56%);
+  --color-navlinkLight-hover:hsl(189, 100%, 36%);
   --color-textDark-100:#B7CAD4;
   --color-textDark-900:#EEF1F3;
   --color-textLight-100:#6a7282;
@@ -13,6 +13,15 @@
 
 }
 @custom-variant pn (@media (max-width: 36.875em));
+@custom-variant dl (@media (min-width:57.5em));
+.bold-on-hover {
+  @apply font-normal transition duration-200;
+}
+
+.bold-on-hover:hover {
+  text-shadow: 0.25px 0 0.1px, -0.25px 0 0.1px;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -34,9 +43,9 @@
 :root[data-theme="light"] {
   --background: #ffffff;
   --text: #213547;
-  --navlink-text:#364153;
-  --navlink-hover:hsl(189, 100%, 56%);
   --navlink-active:hsl(189, 100%, 26%);
+  --navlink-text:#364153;
+  
 }
 
 body{
@@ -67,7 +76,7 @@ body{
 a[aria-current="page"]{
   border-bottom-width: 2px;
   color:var(--navlink-active);
-  font-weight:700
+  text-shadow: 0.25px 0 0.1px, -0.25px 0 0.1px;
 }
 
 

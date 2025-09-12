@@ -10,7 +10,7 @@ interface CollectionFilterProps{
 }
 
 const CollectionFilter :FC<CollectionFilterProps>= ({id,Category,values,showFilter,selectedValues,handleCheckboxChange}) => {
-  const{theme}=useTheme()
+  const{theme}=useTheme();
   return (
     <div id={id} className={`${theme==="dark"?"border-gray-500":"border-gray-300"} border pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'}`}>
       <p className="mb-3 text-sm font-medium">{Category}</p>

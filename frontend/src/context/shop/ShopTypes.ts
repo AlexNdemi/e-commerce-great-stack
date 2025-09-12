@@ -27,11 +27,11 @@ export type Shop = product[];
 type Currencies = currency[];
 type Delivery_fee = number;
 
+
 export interface ShopContextType{
   shop:Shop,
   currencies:Currencies,
   delivery_fee:Delivery_fee,
-
-
-  
+  searchTerm:string
+  setSearchTerm: (term: string) => void  
 }
