@@ -33,7 +33,7 @@ const Footer:FC = () => {
       </div>
     </div>
     <div>
-      <hr className={`${theme==="dark"?"bg-gray-500":"bg-gray-300"} border-0 h-[1px]`}/>
+      <hr className={`${theme==="dark"?"bg-gray-800":"bg-gray-300"} border-0 h-[1px]`}/>
       <p className="py-5 text-sm text-center">&copy; 2024@forever.com-All Rights Reserved</p>
     </div>
 

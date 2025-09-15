@@ -32,6 +32,8 @@ export interface ShopContextType{
   shop:Shop,
   currencies:Currencies,
   delivery_fee:Delivery_fee,
-  searchTerm:string
-  setSearchTerm: (term: string) => void  
+  searchTerm:string,
+  setSearchTerm: (term: string) => void,
+  showSearchBar:boolean,
+  setShowSearchBar:(state:boolean)=>void  
 }

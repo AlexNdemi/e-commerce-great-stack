@@ -2,12 +2,13 @@ import { useState, type FC } from 'react'
 import { NavLink,Link } from 'react-router-dom'
 import {assets} from '../../assets/frontend_assets/assets.ts'
 import { useTheme } from '../../hooks/useTheme.ts';
+import { useShop } from '../../hooks/useShop.ts';
 
 
 const Navbar: FC = () => {
   const [navOpen, setNavOpen] = useState<boolean>(false);
   const{theme,toggleTheme}=useTheme();
-  const [showSearchBar,setShowSearchBar]=useState(false)
+  const {setShowSearchBar}=useShop()
   
   return (
    <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
@@ -125,6 +126,7 @@ const Navbar: FC = () => {
           strokeWidth="1.5" 
           stroke="currentColor" 
           className="size-6"
+          onClick={()=>{setShowSearchBar(true)}}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>

@@ -11,8 +11,9 @@ import { ShopProvider } from "./context/shop/ShopProvider.tsx";
 import Navbar from "./components/ui/Navbar.tsx";
 import Footer from "./components/Footer.tsx";
 import SearchBar from "./components/SearchBar.tsx";
+
 function App() {
-  
+
 
 
   return (

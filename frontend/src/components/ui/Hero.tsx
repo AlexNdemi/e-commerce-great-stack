@@ -5,7 +5,7 @@ import { useTheme } from '../../hooks/useTheme'
 const Hero:FC = () => {
   const {theme}=useTheme();
   return (
-    <div className='flex flex-col sm:flex-row border border-gray-400'>
+    <div className={`flex flex-col sm:flex-row border ${theme === 'dark'?'border-[#3c4043]':'border-[rgba(13,13,13,0.2)]'}`}>
       {/* Hero Left Side */}
       <div className='w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0'>
         <div className={`${theme === 'dark'?'text-[#d6d0d0]':'text-[#414141]'}`}>

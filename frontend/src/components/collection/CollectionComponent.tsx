@@ -4,6 +4,7 @@ import { useCollectionFilter } from './useCollectionFilter'
 import { useTheme } from '../../hooks/useTheme'
 import Title from '../ui/Title'
 import ProductCollection from '../ui/ProductCollection'
+import { useEffect } from 'react'
 
 const CollectionComponent:FC = () => {
   const{theme}=useTheme()
@@ -12,10 +13,13 @@ const CollectionComponent:FC = () => {
     setShowFilter,
     category,
     subCategory,
-    setSortType}=useCollectionFilter()
+    setSortType,
+  }=useCollectionFilter()
+
+    
 
   return (
-    <div className={`flex flex-col dl:flex-row gap-1 sm:gap-10 pt-10 border-t ${theme==="dark"?"border-t-gray-500":"border-t-gray-300"}`}>
+    <div className={`flex flex-col dl:flex-row gap-1 sm:gap-10 pt-10 border-t ${theme==="dark"?"border-t-gray-800":"border-t-gray-300"}`}>
       <div className="min-w-60">
        <button 
         className="my-2 text-xl flex items-center cursor-pointer gap-2" 
