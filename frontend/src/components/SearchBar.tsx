@@ -17,7 +17,7 @@ const SearchBar:FC = () => {
   return <AnimatePresence>
     {showSearchBar?(
       <motion.div 
-        className={`border-t ${theme==="dark"?"border-t-gray-800  ":" border-t-gray-300"} text-center flex items-center justify-center`}
+        className={`border-t ${theme==="dark"?"border-t-[#3c4043]":" border-t-[rgba(13,13,13,0.2)]"} text-center flex items-center justify-center`}
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: "auto", opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}

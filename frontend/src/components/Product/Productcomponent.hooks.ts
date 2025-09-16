@@ -10,6 +10,7 @@ export function useProduct() {
   const [productData, setProductData] = useState<product | undefined>();
   const [loading, setLoading] = useState(true);
   const [image,setImage]=useState<string|undefined>('');
+  const [size,setSize]=useState<string>('')
 
   useEffect(() => {
     if (!id) {
@@ -29,5 +30,5 @@ export function useProduct() {
     setLoading(false);
   }, [shop, id]);
 
-  return { productData, loading, setProductData,image,setImage };
+  return { productData, loading, setProductData,image,setImage,size,setSize };
 }
