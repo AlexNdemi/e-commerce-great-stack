@@ -16,7 +16,7 @@ const Footer:FC = () => {
       </div>
 
       <div>
-        <p className="text-xl font-medium mb-5">COMPANY</p>
+        <p className={`text-xl font-medium mb-5 ${theme==='dark'?'text-[#f1f1f1]':''}`}>COMPANY</p>
         <ul className="flex flex-col gap-1">
           <li>Home</li>
           <li>About us</li>
@@ -25,7 +25,7 @@ const Footer:FC = () => {
         </ul>
       </div>
       <div>
-        <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
+        <p className={`text-xl font-medium mb-5 ${theme==='dark'?'text-[#f1f1f1]':''}`}>GET IN TOUCH</p>
         <ul className="flex flex-col gap-1">
           <li>+1-212-456-7890</li>
           <li>contact@foreveryou.com</li>

@@ -8,7 +8,7 @@ export function useProduct() {
   const { shop } = useShop();
 
   const [productData, setProductData] = useState<product | undefined>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [image,setImage]=useState<string|undefined>('');
   const [size,setSize]=useState<string>('')
 
@@ -26,7 +26,7 @@ export function useProduct() {
     console.log(shop)
 
     setProductData(found);
-    setImage(found.image[0])
+    setImage(found?.image[0])
     setLoading(false);
   }, [shop, id]);
 
