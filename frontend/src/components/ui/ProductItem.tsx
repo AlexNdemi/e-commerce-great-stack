@@ -3,6 +3,7 @@ import { type product } from '../../context/shop/ShopTypes'
 import { Link } from 'react-router-dom'
 import { useCurrency } from '../../hooks/useCurrency'
 import {useTheme} from '../../hooks/useTheme'
+import { scrollToTop } from '../../utils/scrollToTop'
 export type ProductsItemProp = Pick<product,"_id" | "image" | "name" | "price">
 
 const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
@@ -12,6 +13,7 @@ const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
   return (
     <Link 
       to={`/product/${_id}`} 
+      onClick={() => scrollToTop(false)}
       className={`${theme === "dark"?"text-textDark-900": "text-textLight-900"} cursor-pointer`}>
       <div className="overflow-hidden">
         <img 

@@ -22,12 +22,17 @@ export function useProduct() {
     setLoading(true);
 
     // simulate async fetch (even though we're just reading from shop)
-    const found = shop.find((p: product) => p._id === id);
+    const timer = setTimeout(()=>{
+      const found = shop.find((p: product) => p._id === id);
     console.log(shop)
 
     setProductData(found);
     setImage(found?.image[0])
     setLoading(false);
+    },5000)
+
+    return ()=>clearTimeout(timer)
+    
   }, [shop, id]);
 
   return { productData, loading, setProductData,image,setImage,size,setSize };

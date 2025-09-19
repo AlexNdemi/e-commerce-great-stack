@@ -4,13 +4,15 @@ import { useTheme } from '../../hooks/useTheme';
 import { assets } from '../../assets/frontend_assets/assets';
 import { useCurrency } from '../../hooks/useCurrency';
 import {RelevantCollection} from '../../components/campaigns/Relevant/RelevantCollection.tsx'
+import { ProductSkeleton } from './ProductSkeleton.tsx';
+
 
 export const ProductComponent: FC = () => {
   const { productData, loading, image, setImage, size, setSize } = useProduct();
   const { theme } = useTheme();
   const { currency } = useCurrency();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <ProductSkeleton/>;
   if (!productData) return <p>Product not found</p>;
 
   return (
@@ -94,8 +96,8 @@ export const ProductComponent: FC = () => {
       {/* -----Description & Review Section -----*/}
       <div className="mt-20">
         <div className="flex">
-          <b className={`border px-5 py-3 text-sm ${theme === 'dark'?'border-[#3c4043] text-[#f1f1f1]':'border-[rgba(13,13,13,0.2)]'}`}>Description</b>
-          <p className={`border px-5 py-3 text-sm ${theme === 'dark'?'border-[#3c4043]':'border-[rgba(13,13,13,0.2)]'}`}>Reviews {122}</p>
+          <b className={`border px-5 py-3 text-sm ${theme === 'dark'?'border-[#3c4043] text-[#f1f1f1]':'border-[rgba(13,13,13,0.2)]'} border-r-0 border-b-0`}>Description</b>
+          <p className={`border px-5 py-3 text-sm ${theme === 'dark'?'border-[#3c4043]':'border-[rgba(13,13,13,0.2)]'} border-b-0`}>Reviews {122}</p>
         </div>
         <div className={`flex flex-col gap-4 border px-6 py-6 text-sm ${theme === 'dark'?'border-[#3c4043]':'border-[rgba(13,13,13,0.2)]'}`}>
           <p>An e-commerce website is an online platform that facilitates the buying and selling of products or services over the internet. It serves as a virtual marketplace where businesses and individuals can showcase their products, interact with customers, and conduct transactions without the need for a physical presence. E-commerce websites have gained immense popularity due to their convenience, accessibility and the global reach they offer.</p>
