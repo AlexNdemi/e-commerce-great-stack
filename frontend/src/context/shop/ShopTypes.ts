@@ -1,4 +1,15 @@
+export type Size = 'S'|'M'|'L'| 'Xl';
+export type cartItem = Readonly<{
+  sizes:Readonly<{
+    [size in Size]?:number;
 
+  }>;
+}>;
+
+export type cartItems = Readonly<{
+  [productId:string]:cartItem
+}>;
+export type cartCount =number
 export interface product{
   _id:string,
   name:string,
@@ -35,5 +46,9 @@ export interface ShopContextType{
   searchTerm:string,
   setSearchTerm: (term: string) => void,
   showSearchBar:boolean,
-  setShowSearchBar:(state:boolean)=>void  
+  setShowSearchBar:(state:boolean)=>void,
+  cartItems:cartItems,
+  addToCart:(itemId: string, size: Size, quantity: number)=>void,
+  removeFromCart:(itemId: string, size: Size, quantity: number)=> void,
+  cartCount:cartCount
 }

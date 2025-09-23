@@ -17,7 +17,11 @@ export function useLocalStorage<T>(key:string,initialValue:T | (()=>T)):[T,(valu
   });
   useEffect(()=>{
       localStorage.setItem(key,JSON.stringify(value));
-  },[value,key])
+  },[value,key]);
 
-  return [value,setValue];
+  const setStoredValue = (val: T | ((prev: T) => T)) => {
+    setValue((prev) => (typeof val === "function" ? (val as (prev: T) => T)(prev) : val));
+  };
+
+  return [value,setStoredValue];
 }

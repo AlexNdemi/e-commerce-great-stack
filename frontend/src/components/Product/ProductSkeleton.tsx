@@ -5,9 +5,8 @@ import { useTheme } from "../../hooks/useTheme";
 export const ProductSkeleton = () => {
   const { theme } = useTheme();
   
-  // Define colors for both light and dark themes
-  const baseColor = theme === "dark" ? "#202020" : "#ebebeb"; // Light gray for light mode
-  const highlightColor = theme === "dark" ? "#444" : "#f5f5f5"; // Lighter gray for light mode highlight
+  const baseColor = theme === "dark" ? "#202020" : "#ebebeb"; 
+  const highlightColor = theme === "dark" ? "#444" : "#f5f5f5"; 
 
   return (
     <div className="border-t-2 pt-10 border-gray-300 dark:border-t-[rgba(255,255,255,0.2)]">
@@ -20,125 +19,102 @@ export const ProductSkeleton = () => {
             {[...Array(4)].map((_, i) => (
               <Skeleton
                 key={i}
-                height={130}
-                width={100}
+                height={100}
+                width={50}
                 baseColor={baseColor}
                 highlightColor={highlightColor}
-                className="flex-shrink-0 rounded-md"
+                className="rounded-md"
               />
             ))}
           </div>
 
-            {/* Main image */}
-            <div className="w-full lg:w-4/5">
-              <Skeleton
-                height={500}
-                baseColor={baseColor}
-                highlightColor={highlightColor}
-                className="w-full"
-              />
-            </div>
-            {/* ----- Product Info ----- */}
-          <div className="flex-1">
-            {/* Title */}
-            <Skeleton 
-              height={30}
+          {/* Main image */}
+          <div className="w-full lg:w-4/5">
+            <Skeleton
+              height={500}
               baseColor={baseColor}
-              highlightColor={highlightColor} 
-              width="70%"  
-              className="mt-2" />
+              highlightColor={highlightColor}
+              className="w-full"
+            />
+          </div>
+        </div>
+        {/* ----- Product Info ----- */}
+        <div className="flex-1">
+          {/* Title */}
+          <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={30} width="70%" className="mt-2" />
 
-            {/* Stars */}
-            <div className="flex items-center gap-1 mt-2">
-              {[...Array(5)].map((_, i) => (
-                <Skeleton key={i} 
+          {/* Stars */}
+          <div className="flex items-center gap-1 mt-2">
+            {[...Array(5)].map((_, i) => (
+              <Skeleton 
+                baseColor={baseColor}
+                highlightColor={highlightColor} key={i} 
                 width={16} 
                 height={16} 
-                circle 
-                baseColor={baseColor}
-                highlightColor={highlightColor}/>
-              ))}
-              <Skeleton 
-                width={40} 
-                height={16} 
-                className="pl-2" 
-                baseColor={baseColor}
-                highlightColor={highlightColor}/>
-            </div>
-
-            {/* Price */}
+                circle />
+            ))}
             <Skeleton 
-              height={36} 
-              width="30%" 
-              className="mt-5"
               baseColor={baseColor}
-              highlightColor={highlightColor} />
+              highlightColor={highlightColor} width={40} height={16} className="pl-2" />
+          </div>
 
-            {/* Description */}
-            <div className="mt-5 space-y-2 md:max-w-4/5">
-              <Skeleton 
-                height={20} 
-                baseColor={baseColor}
-                highlightColor={highlightColor}/>
-              <Skeleton 
-                height={20} 
-                baseColor={baseColor}
-                highlightColor={highlightColor}/>
-              <Skeleton 
-                height={20} 
-                width="80%" 
-                baseColor={baseColor}
-                highlightColor={highlightColor}/>
+          {/* Price */}
+          <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={36} width="30%" className="mt-5" />
+
+          {/* Description */}
+          <div className="mt-5 space-y-2 md:max-w-4/5">
+            <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={20} />
+            <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={20} />
+            <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={20} width="80%" />
+          </div>
+
+          {/* Sizes + Button */}
+          <div className="flex flex-col gap-4 my-8">
+            <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={20} width="30%" />
+
+            <div className="flex gap-2 flex-wrap">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton 
+                  baseColor={baseColor}
+                  highlightColor={highlightColor} key={i} height={40} 
+                  width={60} />
+              ))}
             </div>
 
-            {/* Sizes + Button */}
-            <div className="flex flex-col gap-4 my-8">
+            <Skeleton 
+              baseColor={baseColor}
+              highlightColor={highlightColor} height={48} width={200} />
+
+            <hr className="bg-gray-300 dark:bg-[rgba(255,255,255,0.2)] border-0 h-[1px]" />
+
+            <div className="text-sm mt-5 flex flex-col gap-1">
               <Skeleton 
-                height={20} 
-                width="30%" 
                 baseColor={baseColor}
-                highlightColor={highlightColor}/>
-
-              <div className="flex gap-2 flex-wrap">
-                {[...Array(3)].map((_, i) => (
-                  <Skeleton 
-                    key={i} 
-                    height={40} 
-                    width={60}
-                    baseColor={baseColor}
-                    highlightColor={highlightColor}/>
-                ))}
-              </div>
-
+                highlightColor={highlightColor} height={16} 
+                width="80%" />
               <Skeleton 
-                height={48} 
-                width={200}
                 baseColor={baseColor}
-                highlightColor={highlightColor} />
-
-              <hr className="bg-gray-300 dark:bg-[rgba(255,255,255,0.2)] border-0 h-[1px]" />
-
-              <div className="text-sm mt-5 flex flex-col gap-1">
-                <Skeleton 
-                  height={16} 
-                  width="80%" 
-                  baseColor={baseColor}
-                  highlightColor={highlightColor}/>
-                <Skeleton 
-                  height={16} 
-                  width="70%" 
-                  baseColor={baseColor}
-                  highlightColor={highlightColor}/>
-                <Skeleton 
-                  height={16} 
-                  width="90%" 
-                  baseColor={baseColor}
-                  highlightColor={highlightColor}/>
-              </div>
+                highlightColor={highlightColor} height={16} width="70%" />
+              <Skeleton 
+                baseColor={baseColor}
+                highlightColor={highlightColor} height={16} 
+                width="90%" />
             </div>
           </div>
-        </div> *   
+        </div>
       </div>
-    </div>
+    </div>  
   );
 };

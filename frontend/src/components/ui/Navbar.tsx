@@ -1,5 +1,5 @@
 import { useState, type FC } from 'react'
-import { NavLink,Link } from 'react-router-dom'
+import { NavLink,Link, useNavigate } from 'react-router-dom'
 import {assets} from '../../assets/frontend_assets/assets.ts'
 import { useTheme } from '../../hooks/useTheme.ts';
 import { useShop } from '../../hooks/useShop.ts';
@@ -8,7 +8,8 @@ import { useShop } from '../../hooks/useShop.ts';
 const Navbar: FC = () => {
   const [navOpen, setNavOpen] = useState<boolean>(false);
   const{theme,toggleTheme}=useTheme();
-  const {setShowSearchBar}=useShop()
+  const {setShowSearchBar,cartCount}=useShop()
+  const navigate=useNavigate();
   
   return (
    <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
@@ -126,7 +127,10 @@ const Navbar: FC = () => {
           strokeWidth="1.5" 
           stroke="currentColor" 
           className="size-6"
-          onClick={()=>{setShowSearchBar(true)}}
+          onClick={()=>{
+            setShowSearchBar(true)
+            navigate("/collection")
+          }}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>
@@ -157,7 +161,8 @@ const Navbar: FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
           </svg>
 
-          <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[10px]">10</p>
+          {cartCount > 0 && <p className={`absolute left-[12px] py-0 px-1 top-[-4px] h-4 min-w-2 max-w-[18px] font-normal
+             text-center leading-4 ${theme === 'dark'?"bg-white text-black": "bg-black text-white"} rounded-3xl text-[12px] font-bold inline-block`}>{cartCount>9?"9+":cartCount}</p>}
         </Link>
         
         <button 

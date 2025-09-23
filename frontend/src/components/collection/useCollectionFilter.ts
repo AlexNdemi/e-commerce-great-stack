@@ -9,21 +9,22 @@ import { useLocation } from "react-router-dom"
 export function useCollectionFilter() {
   const { shop, searchTerm, setSearchTerm,setShowSearchBar } = useShop()
   const [showFilter, setShowFilter] = useState(false)
+  const location = useLocation();
 
   const category = useMultiSelect()
   const subCategory = useMultiSelect()
   const [sortType, setSortType] = useState<string>("relevant")
-  const location = useLocation()
+  
 
   const debouncedSearch = useDebounce(searchTerm, 300)
 
   useEffect(()=>{
-    setShowSearchBar(true)
-    return()=>{
-      if(location.pathname.includes('collection')){
-        setShowSearchBar(false)
+    if(!location.pathname.includes('collection')){
+        setShowSearchBar(false);
       }
+    return()=>{
       
+          
     } 
   },[setShowSearchBar,location])
   // ✅ useMemo stays synchronous

@@ -5,12 +5,15 @@ import { assets } from '../../assets/frontend_assets/assets';
 import { useCurrency } from '../../hooks/useCurrency';
 import {RelevantCollection} from '../../components/campaigns/Relevant/RelevantCollection.tsx'
 import { ProductSkeleton } from './ProductSkeleton.tsx';
+import { toast } from 'react-toastify';
+import { useShop } from '../../hooks/useShop.ts';
 
 
 export const ProductComponent: FC = () => {
   const { productData, loading, image, setImage, size, setSize } = useProduct();
   const { theme } = useTheme();
   const { currency } = useCurrency();
+  const {addToCart} = useShop();
 
   if (loading) return <ProductSkeleton/>;
   if (!productData) return <p>Product not found</p>;
@@ -80,7 +83,17 @@ export const ProductComponent: FC = () => {
                 ))}
               </div>
             </div>
-            <button className={`${theme === 'dark'? 'bg-[rgb(255,255,255)] text-[#0f0f0f] active:bg-[#ffffffe5]':'bg-black text-white active:bg-gray-700'} px-8 py-3 text-sm`}>
+            <button 
+              className={`${theme === 'dark'? 'bg-[rgb(255,255,255)] text-[#0f0f0f] active:bg-[#ffffffe5]':'bg-black text-white active:bg-gray-700'} px-8 py-3 text-sm`}
+              onClick={
+                ()=>{
+                  if(!size){
+                    toast.error("Select  Product Size")
+                    return
+                  }
+                 addToCart(productData._id,size)
+              }
+              }>
               ADD TO CART
             </button>
             <hr className={`${theme === "dark" ? "bg-[rgba(255,255,255,0.2)]" : "bg-gray-300"} border-0 h-[1px]`} />
