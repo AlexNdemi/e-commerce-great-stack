@@ -18,7 +18,7 @@ export interface product{
   image:string[],
   category:string,
   subCategory:string,
-  sizes:string[]
+  sizes:Size[]
   date:number,
   bestseller:boolean
 

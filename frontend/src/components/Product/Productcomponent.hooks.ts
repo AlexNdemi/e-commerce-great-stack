@@ -1,16 +1,44 @@
+// Update the useProduct hook
 import { useShop } from '../../hooks/useShop';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import type { product } from '../../context/shop/ShopTypes';
+import type { cartItem, product, Size } from '../../context/shop/ShopTypes';
 
 export function useProduct() {
   const { id } = useParams();
-  const { shop } = useShop();
+  const { shop, cartItems } = useShop();
 
   const [productData, setProductData] = useState<product | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [image,setImage]=useState<string|undefined>('');
-  const [size,setSize]=useState<string>('')
+  const [image, setImage] = useState<string | undefined>('');
+  const [size, setSize] = useState<Size | null>(null);
+  const [showCartModal, setShowCartModal] = useState<boolean>(false);
+
+  const sizeQuantities: cartItem = useMemo(() => {
+  if (!id || !productData) {
+    return { sizes: {} };
+  }
+
+  let sizes: { [key: string]: number } = {};
+
+  productData.sizes.forEach((size) => {
+    sizes = { ...sizes, [size]: cartItems[id]?.sizes?.[size] ?? 0 };
+  });
+
+  return { sizes };
+}, [cartItems, id, productData]);
+
+
+
+  const productCount = useMemo(() => {
+    if (!id) {
+      return 0;
+    }
+    if (!cartItems[id]) {
+      return 0;
+    }
+    return Object.values(cartItems[id].sizes || {}).reduce((acc, qty) => acc + qty, 0);
+  }, [cartItems, id]);
 
   useEffect(() => {
     if (!id) {
@@ -20,20 +48,29 @@ export function useProduct() {
     }
 
     setLoading(true);
+    setSize(null);
 
-    // simulate async fetch (even though we're just reading from shop)
-    const timer = setTimeout(()=>{
+    const timer = setTimeout(() => {
       const found = shop.find((p: product) => p._id === id);
-    console.log(shop)
+      setProductData(found);
+      setImage(found?.image[0]);
+      setLoading(false);
+    }, 500);
 
-    setProductData(found);
-    setImage(found?.image[0])
-    setLoading(false);
-    },5000)
-
-    return ()=>clearTimeout(timer)
-    
+    return () => clearTimeout(timer);
   }, [shop, id]);
 
-  return { productData, loading, setProductData,image,setImage,size,setSize };
+  return { 
+    productData, 
+    loading, 
+    setProductData, 
+    image, 
+    setImage, 
+    size, 
+    setSize, 
+    productCount,
+    sizeQuantities,
+    showCartModal,
+    setShowCartModal
+  };
 }
