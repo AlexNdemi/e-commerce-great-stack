@@ -1,8 +1,8 @@
 // components/CartModal.tsx
 import { type FC } from 'react';
-import { useTheme } from '../../hooks/useTheme';
-import { useCurrency } from '../../hooks/useCurrency';
-import type { cartItem, Size } from '../../context/shop/ShopTypes';
+import { useTheme } from '../../../hooks/useTheme';
+import { useCurrency } from '../../../hooks/useCurrency';
+import type { cartItem, Size } from '../../../context/shop/ShopTypes';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -33,12 +33,12 @@ export const CartModal: FC<CartModalProps> = ({
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Overlay */}
-          <div className="absolute inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-3xl" onClick={onClose} />
+          <div className="absolute inset-0 bg-[rgba(0,0,0,0.6)] " onClick={onClose} />
 
           {/* Modal box */}
             <div 
           className={` relative z-10 w-full max-w-md rounded-lg shadow-xl transform transition-all ${
-            theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'
+            theme === 'dark' ? 'bg-[#121212] text-white' : 'bg-[#fff] text-black'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
@@ -47,7 +47,7 @@ export const CartModal: FC<CartModalProps> = ({
             theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
           }`}>
             <div>
-              <h3 className="text-xl font-bold">Your Cart</h3>
+              <h3 className="text-xl font-bold">Please select a variation</h3>
               <p className="text-sm opacity-75 mt-1">{productName}</p>
             </div>
             <button
@@ -84,16 +84,16 @@ export const CartModal: FC<CartModalProps> = ({
                 
                 {Object.entries(cartItem.sizes).map(([size, quantity]) => (
                   <div key={size} className="flex items-center justify-between p-3 rounded-lg border bg-opacity-50">
-                    <span className="font-semibold">{size}</span>
+                    <span className="font-semibold w-7">{size}</span>
                     
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 w-28">
                       <button
-                        onClick={() => onSizeQuantityChange(size, Math.max(0, quantity - 1))}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                        onClick={() => onSizeQuantityChange(size as Size, Math.max(0, quantity - 1))}
+                        className={`w-8 h-8 rounded-[7px] flex items-center justify-center transition-colors ${
                           theme === 'dark' 
                             ? 'bg-gray-700 hover:bg-gray-600' 
-                            : 'bg-gray-100 hover:bg-gray-200'
-                        }`}
+                            : 'bg-black hover:bg-gray-800'
+                        } text-white ${quantity === 0 ? 'disabled':''}`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -103,12 +103,12 @@ export const CartModal: FC<CartModalProps> = ({
                       <span className="w-8 text-center font-semibold text-lg">{quantity}</span>
                       
                       <button
-                        onClick={() => onSizeQuantityChange(size, quantity + 1)}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                        onClick={() => onSizeQuantityChange(size as Size, quantity + 1)}
+                        className={`w-8 h-8 rounded-[7px] flex items-center justify-center transition-colors ${
                           theme === 'dark' 
                             ? 'bg-gray-700 hover:bg-gray-600' 
                             : 'bg-gray-100 hover:bg-gray-200'
-                        }`}
+                        }  bg-orange-500 hover:bg-orange-600 text-white ${quantity === 10 ? 'disabled':''}`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -116,7 +116,7 @@ export const CartModal: FC<CartModalProps> = ({
                       </button>
                     </div>
                     
-                    <span className="font-semibold text-right">
+                    <span className="font-semibold text-right w-28">
                       {currency.symbol}{(quantity * productPrice).toFixed(2)}
                     </span>
                   </div>
@@ -136,9 +136,7 @@ export const CartModal: FC<CartModalProps> = ({
           </div>
 
           {/* Modal Footer */}
-          <div className={`p-6 border-t ${
-            theme === 'dark' ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-gray-50'
-          }`}>
+          <div className={`p-6 border-t `}>
             <div className="flex gap-3">
               <button
                 onClick={onClose}

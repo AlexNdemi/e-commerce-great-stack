@@ -14,6 +14,15 @@ export function useProduct() {
   const [size, setSize] = useState<Size | null>(null);
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
 
+  function openCartModal(){
+    document.body.classList.add('no-scroll');
+    setShowCartModal(true);
+  }
+  function closeCartModal(){
+    document.body.classList.remove('no-scroll');
+    setShowCartModal(false);
+  }
+
   const sizeQuantities: cartItem = useMemo(() => {
   if (!id || !productData) {
     return { sizes: {} };
@@ -71,6 +80,7 @@ export function useProduct() {
     productCount,
     sizeQuantities,
     showCartModal,
-    setShowCartModal
+    openCartModal,
+    closeCartModal
   };
 }

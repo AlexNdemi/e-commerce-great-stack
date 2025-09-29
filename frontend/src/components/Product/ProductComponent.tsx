@@ -6,7 +6,7 @@ import { RelevantCollection } from '../../components/campaigns/Relevant/Relevant
 import { ProductSkeleton } from './ProductSkeleton.tsx';
 import { toast } from 'react-toastify';
 import { useShop } from '../../hooks/useShop.ts';
-import { CartModal } from '../../components/CartModal/CartModal.tsx';
+import { CartModal } from '../cart/CartModal/CartModal.tsx';
 import type { Size } from '../../context/shop/ShopTypes.ts';
 import { assets } from '../../assets/frontend_assets/assets.ts';
 
@@ -21,16 +21,15 @@ export const ProductComponent: FC = () => {
     productCount,
     sizeQuantities,
     showCartModal,
-    setShowCartModal
+    openCartModal,
+    closeCartModal
   } = useProduct();
   
   const { theme } = useTheme();
   const { currency } = useCurrency();
   const { addToCart, removeFromCart } = useShop();
 
-  function openCartModal(){
-    setShowCartModal(true);
-  }
+  
 
   // Function to handle adding to cart
   const handleAddToCart = () => {
@@ -66,7 +65,7 @@ export const ProductComponent: FC = () => {
       {/* Cart Modal */}
       <CartModal
         isOpen={showCartModal}
-        onClose={() => setShowCartModal(false)}
+        onClose={closeCartModal}
         productName={productData.name}
         productPrice={productData.price}
         cartItem={sizeQuantities}
@@ -123,24 +122,10 @@ export const ProductComponent: FC = () => {
                           openCartModal()
                           return
                         }setSize(item) }}
-                      className={`border py-2 px-4 transition-all duration-200 rounded-lg ${
-                      theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'
-                    } ${
-                      item === size 
-                        ? 'border-2 border-orange-500 ring-2 ring-orange-200 ring-opacity-50' 
-                        : 'border-gray-300'
-                    } ${
-                      sizeQuantities.sizes[item] 
-                        ? 'relative after:content-[""] after:absolute after:-top-1 after:-right-1 after:w-5 after:h-5 after:bg-orange-500 after:rounded-full after:text-white after:text-xs after:flex after:items-center after:justify-center' 
-                        : ''
-                    }`}
+                      className={`border py-2 px-4 transition-all duration-200 rounded-lg ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} ${item ===  size ? 'border-2 border-orange-500 ring-2 ring-orange-200 ring-opacity-50':'border-gray-300'} ${sizeQuantities.sizes[item] ? 'relative after:content-[""] after:absolute after:-top-1 after:-right-1 after:w-5 after:h-5 after:bg-orange-500 after:rounded-full after:text-white after:text-xs after:flex after:items-center after:justify-center' : ''}`
+                      }
                   >
                     {item}
-                    {sizeQuantities.sizes[item] && (
-                      <span className="absolute -top-2 -right-2 w-5 h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
-                        {sizeQuantities.sizes[item]}
-                      </span>
-                    )}
                   </button>
                 ))}
               </div>
@@ -163,19 +148,13 @@ export const ProductComponent: FC = () => {
             {/* Improved Quantity Controls for non-empty cart */}
             {productCount > 0 && (
               <div className='flex flex-col gap-4'>
-                <div className={`flex items-center justify-between p-4 rounded-xl border-2 ${
-                  theme === 'dark' 
-                    ? 'bg-gray-800 border-gray-700' 
-                    : 'bg-gray-50 border-gray-200'
-                }`}>
+                <div className={`flex gap-4 items-center  max-w-60`}>
                   {/* Remove Button */}
                   <button 
                     onClick={openCartModal}
-                    className={`w-12 h-12 rounded-[7px] flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${
-                      theme === 'dark'
-                        ? 'bg-red-600 hover:bg-red-700 text-white'
-                        : 'bg-red-500 hover:bg-red-600 text-white'
-                    } shadow-lg`}
+                    className={
+                      `w-10 h-10 rounded-[7px] flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300': 'bg-black text-white hover:bg-gray-800 active:bg-gray-700'} shadow-lg`
+                     }
                     title="Remove one item"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -185,8 +164,8 @@ export const ProductComponent: FC = () => {
                   
                   {/* Quantity Display - Clickable */}
                   <div 
-                    className="flex flex-col items-center cursor-pointer group"
-                    onClick={() => setShowCartModal(true)}
+                    className="flex flex-col items-center justify-start cursor-pointer group"
+                    onClick={closeCartModal}
                   >
                     <span className="text-2xl font-bold group-hover:text-orange-500 transition-colors">
                       {productCount}
@@ -202,11 +181,9 @@ export const ProductComponent: FC = () => {
                   {/* Add Button */}
                   <button
                     onClick={openCartModal}
-                    className={`w-12 h-12 rounded-[7px] flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${
-                      theme === 'dark'
-                        ? 'bg-green-600 hover:bg-green-700 text-white'
-                        : 'bg-green-500 hover:bg-green-600 text-white'
-                    } shadow-lg`}
+                    className={`w-10 h-10 rounded-[7px] flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300' 
+                    : 'bg-black text-white hover:bg-gray-800 active:bg-gray-700'
+                } shadow-lg`}
                     title="Add one more item"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -217,14 +194,14 @@ export const ProductComponent: FC = () => {
 
                 {/* Quick View Button */}
                 <button
-                  onClick={() => setShowCartModal(true)}
+                  onClick={closeCartModal}
                   className={`py-3 px-6 rounded-lg font-medium transition-all duration-200 border-2 ${
                     theme === 'dark'
                       ? 'border-gray-600 hover:border-orange-500 bg-gray-800 hover:bg-gray-700'
                       : 'border-gray-300 hover:border-orange-400 bg-white hover:bg-gray-50'
                   } transform hover:scale-105 active:scale-95`}
                 >
-                  🛒 View Cart Details
+                  🛒 View Selected Sizes 
                 </button>
               </div>
             )}
