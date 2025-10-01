@@ -9,6 +9,7 @@ import { useShop } from '../../hooks/useShop.ts';
 import { CartModal } from '../cart/CartModal/CartModal.tsx';
 import type { Size } from '../../context/shop/ShopTypes.ts';
 import { assets } from '../../assets/frontend_assets/assets.ts';
+import { ImageWithSkeleton } from '../ui/ImageWithSkeleton.tsx';
 
 export const ProductComponent: FC = () => {
   const { 
@@ -79,20 +80,26 @@ export const ProductComponent: FC = () => {
           {/* Thumbnail images - Modified to match main image width on small screens */} 
           <div className="flex lg:flex-col overflow-x-auto lg:overflow-y-auto justify-between lg:justify-start lg:w-1/5 gap-2 order-1 lg:order-0 w-full"> 
           {
-            productData.image.map((item, index) => ( <img 
-              key={index} 
-              src={item} 
-              className="w-1/5 lg:w-full lg:h-auto flex-shrink-0 cursor-pointer object-cover" 
-              onClick={() => { setImage(item) }} 
+            productData.image.map((item, index) => ( 
+            <ImageWithSkeleton
+              key={index}
+              src={item}
               alt={`Product image ${index + 1}`}
-              />
+              className='w-1/5 lg:w-full lg:h-auto flex-shrink-0'
+              imageClassName='cursor-pointer'
+              clickHandler={()=>{setImage(item)}}/>
               ))} 
           </div> 
           {/* Main image */} 
           <div className="w-full lg:min-w-4/5"> 
-                  <img src={image} 
+                  <ImageWithSkeleton
+                    src={image || ''}
+                    alt="Main product image"
+                    className='w-full h-auto max-h-[500px]'
+                    imageClassName='object-contain h-auto'/> 
+                   <img src={image} 
                     alt="Main product image" 
-                    className="w-full h-auto object-contain max-h-[500px]" /> 
+                    className="w-full h-auto object-contain max-h-[500px]" />
           </div>  
         </div>
         {/* -----Product Info----- */}
