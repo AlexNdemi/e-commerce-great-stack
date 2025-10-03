@@ -96,10 +96,7 @@ export const ProductComponent: FC = () => {
                     src={image || ''}
                     alt="Main product image"
                     className='w-full h-auto max-h-[500px]'
-                    imageClassName='object-contain h-auto'/> 
-                   <img src={image} 
-                    alt="Main product image" 
-                    className="w-full h-auto object-contain max-h-[500px]" />
+                    imageClassName='object-contain'/> 
           </div>  
         </div>
         {/* -----Product Info----- */}

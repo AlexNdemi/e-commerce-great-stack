@@ -1,41 +1,33 @@
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { useState } from "react";
 import { useTheme } from "../../hooks/useTheme";
+import { useState } from "react";
 
-interface ImageWithSkeletonProps {
-  src: string;
-  alt: string;
-  className?: string;
-  imageClassName?: string;
-  clickHandler?:()=>void   
- 
+interface ImageSkeletonProps{
+  src:string;
+  className:string;
+  alt:string;
+  imageClassName?:string;
+  clickHandler?:()=>void
 }
 
-export function ImageWithSkeleton({
-  src,
-  alt,
-  className,
-  clickHandler,
-  imageClassName,
-  
-}: ImageWithSkeletonProps) { 
+export const ImageWithSkeleton= ({src,className,alt,imageClassName,clickHandler}:ImageSkeletonProps) => {
+  const {theme}=useTheme();
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const {theme}=useTheme()
-  const baseColor = theme === "dark" ? "#202020" : "#ebebeb"; 
-  const highlightColor = theme === "dark" ? "#444" : "#f5f5f5";
 
   return (
-    <div className={`${className} relative overflow-hidden`} >
-      {!(loaded || error) &&  (
-        <Skeleton
-          className="w-full h-full"
-          baseColor={baseColor}
-          highlightColor={highlightColor}
-        />
+    <>
+      {!(loaded || error) && (
+      <svg
+          className={`${theme === 'dark'?'text-gray-600':'text-gray-200'} ${className} animate-pulse`}
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 18"
+        >
+          <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+       </svg>
       )}
-      {error && (
+    {error && (
         <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
             {/* Example: A simple icon or text */}
             <span className="text-sm text-gray-500">❌ Image Failed</span>
@@ -45,7 +37,7 @@ export function ImageWithSkeleton({
         src={src}
         onClick={clickHandler}
         alt={alt}
-        className={`w-full h-full object-cover ${imageClassName} transition-opacity duration-500 ${
+        className={`${className} ${imageClassName} transition-opacity duration-500 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
         onLoad={() => setLoaded(true)}
@@ -53,7 +45,8 @@ export function ImageWithSkeleton({
             setLoaded(false);
             setError(true);  
         }}
-      />
-    </div>
-  );
+      />  
+    </>
+    
+  )
 }

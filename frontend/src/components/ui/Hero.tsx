@@ -1,7 +1,7 @@
 import {type FC} from 'react'
 import { assets } from '../../assets/frontend_assets/assets'
 import { useTheme } from '../../hooks/useTheme'
-import { ImageWithSkeleton } from './ImageWithSkeleton';
+import { ImageWithSkeleton} from './ImageWithSkeleton'
 
 const Hero:FC = () => {
   const {theme}=useTheme();

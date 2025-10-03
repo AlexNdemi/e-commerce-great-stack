@@ -10,7 +10,7 @@ const Navbar: FC = () => {
   const{theme,toggleTheme}=useTheme();
   const {setShowSearchBar,cartCount}=useShop()
   const navigate=useNavigate();
-  
+  console.log(cartCount)  
   return (
    <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
       <div className='z-30'>

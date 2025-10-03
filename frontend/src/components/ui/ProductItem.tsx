@@ -18,6 +18,7 @@ const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
       className={`${theme === "dark"?"text-textDark-900": "text-textLight-900"} cursor-pointer`}>
       <div className="overflow-hidden">
          <ImageWithSkeleton
+            className=''
             src={image[0]}
             alt={`Product ${_id}`}
             imageClassName='hover:scale-110 transition ease-in-out'

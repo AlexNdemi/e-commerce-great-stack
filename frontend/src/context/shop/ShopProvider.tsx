@@ -37,6 +37,34 @@ export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {
     toast.success('product added successfuly')
   };
 
+  const removeSizeFromCart = (itemId: string, size: Size): void => {
+    let removedQty = 0;
+
+    const newCartItems = produce(cartItems, (draft) => {
+      const currentItem = draft[itemId];
+      if (!currentItem) return;
+
+      const currentQty = currentItem.sizes[size] ?? 0;
+      if (currentQty > 0) {
+        removedQty = currentQty;
+        delete currentItem.sizes[size];
+      }
+
+    // Clean up if no sizes left
+      if (Object.keys(currentItem.sizes).length === 0) {
+      delete draft[itemId];
+       }
+    });
+
+    if (removedQty > 0) {
+      setCartItems(newCartItems);
+      const newCartCount = cartCount - removedQty;
+      setCartCount(newCartCount);
+      toast("Size removed successfully");
+    }
+  };
+
+
   const removeFromCart = (itemId: string, size: Size, quantity: number): void => {
     const newCartItems = produce(cartItems, (draft) => {
       const currentItem = draft[itemId];
@@ -77,6 +105,7 @@ export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {
           cartItems,
           addToCart,
           removeFromCart,
+          removeSizeFromCart,
           cartCount,
         } as ShopContextType
       }
