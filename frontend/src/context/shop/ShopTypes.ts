@@ -50,6 +50,6 @@ export interface ShopContextType{
   cartItems:cartItems,
   addToCart:(itemId: string, size: Size, quantity: number)=>void,
   removeFromCart:(itemId: string, size: Size, quantity: number)=> void,
-  removeSizeFromCart:(itemId: string, size: Size, quantity: number)=> void
+  removeSizeFromCart:(itemId: string, size: Size)=> void
   cartCount:cartCount
 }

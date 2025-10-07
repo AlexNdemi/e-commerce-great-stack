@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo,useState } from "react";
 import { useShop } from "../../hooks/useShop";
 import type { Size } from "../../context/shop/ShopTypes";
 
@@ -8,9 +8,18 @@ export type CartDataEntry = {
   quantity: number;
 };
 
-function useCartData():CartDataEntry[] {
+function useCartData() {
   const { cartItems } = useShop();
-
+  const [isDeleteModalOpen,setIsDeleteModalOpen]=useState<boolean>(false);
+  function openDeleteItemModal(){
+    document.body.classList.add('no-scroll');
+    setIsDeleteModalOpen(true);
+    
+  }
+  function closeDeleteItemModal(){
+    document.body.classList.remove('no-scroll');
+    setIsDeleteModalOpen(false)
+  }
   const cartData = useMemo(() => {
     return Object.entries(cartItems).reduce<CartDataEntry[]>((acc, [productId, cartItem]) => {
       Object.entries(cartItem.sizes).forEach(([size, quantity]) => {
@@ -26,7 +35,8 @@ function useCartData():CartDataEntry[] {
     }, []);
   }, [cartItems]);
 
-  return cartData;
+  return {cartData,isDeleteModalOpen,openDeleteItemModal,closeDeleteItemModal};
 }
+
 
 export default useCartData;
