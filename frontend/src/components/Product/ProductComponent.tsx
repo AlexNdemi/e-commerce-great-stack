@@ -28,7 +28,7 @@ export const ProductComponent: FC = () => {
   
   const { theme } = useTheme();
   const { currency } = useCurrency();
-  const { addToCart, removeFromCart } = useShop();
+  const { increaseCartItem, decreaseCartItem } = useShop();
 
   
 
@@ -41,7 +41,7 @@ export const ProductComponent: FC = () => {
       return;
     }
     
-    addToCart(productData._id, size, 1);
+    increaseCartItem(productData._id, size, 1);
     setSize(null);
   };
 
@@ -52,9 +52,9 @@ export const ProductComponent: FC = () => {
     const currentQuantity = sizeQuantities.sizes[size] || 0;
     
     if (newQuantity > currentQuantity) {
-      addToCart(productData._id, size, newQuantity - currentQuantity);
+      increaseCartItem(productData._id, size, newQuantity - currentQuantity);
     } else if (newQuantity < currentQuantity) {
-      removeFromCart(productData._id, size, currentQuantity - newQuantity);
+      decreaseCartItem(productData._id, size, currentQuantity - newQuantity);
     }
   };
 

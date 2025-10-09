@@ -3,6 +3,7 @@ import { type FC } from 'react';
 import { useTheme } from '../../../hooks/useTheme';
 import { useCurrency } from '../../../hooks/useCurrency';
 import type { cartItem, Size } from '../../../context/shop/ShopTypes';
+import { useNavigate } from 'react-router-dom';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const CartModal: FC<CartModalProps> = ({
 }) => {
   const { theme } = useTheme();
   const { currency } = useCurrency();
+  const navigate = useNavigate()
 
   if (!isOpen) return null;
 
@@ -150,6 +152,7 @@ export const CartModal: FC<CartModalProps> = ({
                       </button>
                       {totalItems > 0 && (
                         <button
+                          onClick={()=>navigate("/cart")}
                           className={`flex-1 py-3 rounded-lg font-medium text-white transition-colors ${
                             theme === 'dark' 
                               ? 'bg-orange-500 hover:bg-orange-600' 

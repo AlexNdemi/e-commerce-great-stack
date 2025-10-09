@@ -24,7 +24,7 @@ function App() {
          <QueryClientProvider client={queryClient}>
           <Router>
             <Suspense fallback={<Loader/>}>
-              <div className="px-4 sm:px-[5vw] md:px-[7w] lg:px-[9vw]">
+              <div className="px-4 sm:px-[5vw] md:px-[7w] lg:px-[9vw] max-w-[1280px]">
                 <ToastContainer/>
                 <Navbar/>
                 <SearchBar/>

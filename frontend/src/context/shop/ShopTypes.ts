@@ -48,8 +48,8 @@ export interface ShopContextType{
   showSearchBar:boolean,
   setShowSearchBar:(state:boolean)=>void,
   cartItems:cartItems,
-  addToCart:(itemId: string, size: Size, quantity: number)=>void,
-  removeFromCart:(itemId: string, size: Size, quantity: number)=> void,
+  increaseCartItem:(itemId: string, size: Size, quantity: number)=>void,
+  decreaseCartItem:(itemId: string, size: Size, quantity: number)=> void,
   removeSizeFromCart:(itemId: string, size: Size)=> void
   cartCount:cartCount
 }

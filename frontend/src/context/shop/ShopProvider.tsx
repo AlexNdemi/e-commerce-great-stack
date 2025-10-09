@@ -16,7 +16,7 @@ export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useLocalStorage<cartItems>("cartItems", {});
   const [cartCount, setCartCount] = useLocalStorage<number>("cartCount", 0);
 
-  const addToCart = (itemId: string, size: Size, quantity: number = 1): void => {
+  const increaseCartItem = (itemId: string, size: Size, quantity: number = 1): void => {
     const newCartItems = produce(cartItems, (draft) => {
       if (!draft[itemId]) {
         draft[itemId] = { sizes: {} };
@@ -60,12 +60,12 @@ export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setCartItems(newCartItems);
       const newCartCount = cartCount - removedQty;
       setCartCount(newCartCount);
-      toast("Size removed successfully");
+      toast("item removed successfully");
     }
   };
 
 
-  const removeFromCart = (itemId: string, size: Size, quantity: number): void => {
+  const decreaseCartItem = (itemId: string, size: Size, quantity: number): void => {
     const newCartItems = produce(cartItems, (draft) => {
       const currentItem = draft[itemId];
       if (!currentItem) return;
@@ -103,8 +103,8 @@ export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {
           showSearchBar,
           setShowSearchBar,
           cartItems,
-          addToCart,
-          removeFromCart,
+          increaseCartItem,
+          decreaseCartItem,
           removeSizeFromCart,
           cartCount,
         } as ShopContextType
