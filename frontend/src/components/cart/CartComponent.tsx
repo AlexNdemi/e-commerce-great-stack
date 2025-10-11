@@ -127,7 +127,8 @@ const  CartComponent:FC = ()=> {
             })
           }
         </div>
-        <div className={`flex fx:sticky fx:order-3  sm:w-fit rounded-[5px] ${theme === 'dark' ? 'bg-[#181818]' : 'bg-[rgb(245,245,245)]'} p-3`}>
+        <div className={`fx:order-3 sm:w-fit rounded-[5px] p-3
+                  fx:sticky fx:top-0 self-start ${theme === 'dark' ? 'bg-[#181818]' : 'bg-[rgb(245,245,245)]'} p-3`}>
           <div className="w-full sm:w-[300px]">
             <CartTotal subtotal={cartitemsSubtotal}/>
             <div className="w-full text-end">
