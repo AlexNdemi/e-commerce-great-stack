@@ -13,13 +13,13 @@ import { Link } from 'react-router-dom';
 import CartTotal from './deleteCartItem/cartTotal/CartTotal';
 
 
-
 const  CartComponent:FC = ()=> {
   const { theme } = useTheme();
   const {currency}=useCurrency()
-  const {cartData}=useCartData();
+  const {cartDataEntries,cartitemsSubtotal}=useCartData();
   const {increaseCartItem,decreaseCartItem,shop}=useShop();
   const{isOpen,openModal,closeModal,confirmDelete}=useDeleteCartItemModal();
+  
  
   return (
     <div className={`pt-7`}>
@@ -35,12 +35,11 @@ const  CartComponent:FC = ()=> {
       <div className="text-2xl mb-3">
         <Title text1='YOUR' text2='CART'/>
       </div>
-      <div className='flex flex-col fx:flex-row fx:justify-between gap-6 relative'>
-        <div className='flex flex-col min-w-[660px]'>
+      <div className='flex flex-col fx:flex-row  fx:justify-between fx:items-start gap-10 relative'>
+        <div className='flex flex-col fx:grow order-2'>
           {
-            cartData.map((item,index)=>{
-              const productData = shop.find((product)=>product._id === item._id);
-              const itemSubtotal = productData?.price ?? 0 * item.quantity;
+            cartDataEntries.map((item,index)=>{
+              const productData=shop.find((product)=>product._id === item._id)
               return (
                 <div
                   key={index}
@@ -69,7 +68,7 @@ const  CartComponent:FC = ()=> {
                           </div>
                           </div>
                         </Link>
-                        <p className='text-2xl text-right whitespace-nowrap'>{currency.symbol} {itemSubtotal}</p>
+                        <p className='text-2xl text-right whitespace-nowrap'>{currency.symbol} {item.subtotal}</p>
                       </div>
                       <div
                         className='flex justify-between min-h-24'
@@ -128,15 +127,14 @@ const  CartComponent:FC = ()=> {
             })
           }
         </div>
-        <div className="flex  sm:sticky ">
+        <div className={`flex fx:sticky fx:order-3  sm:w-fit rounded-[5px] ${theme === 'dark' ? 'bg-[#181818]' : 'bg-[rgb(245,245,245)]'} p-3`}>
           <div className="w-full sm:w-[300px]">
-            <CartTotal/>
+            <CartTotal subtotal={cartitemsSubtotal}/>
             <div className="w-full text-end">
               div
             </div>
           </div>
         </div>
-
       </div>
       
     </div>

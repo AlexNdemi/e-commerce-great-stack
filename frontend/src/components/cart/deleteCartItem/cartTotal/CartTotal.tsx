@@ -2,28 +2,35 @@ import {type FC} from 'react'
 import Title from '../../../ui/Title'
 import { useShop } from '../../../../hooks/useShop'
 import { useCurrency } from '../../../../hooks/useCurrency';
-const CartTotal:FC = () => {
+import { useTheme } from '../../../../hooks/useTheme';
+
+interface CartTotal{
+  subtotal:number
+}
+const CartTotal:FC<CartTotal> = ({subtotal}) => {
   const{delivery_fee}=useShop();
   const{currency}=useCurrency();
+  const{theme}=useTheme();
+  const total=delivery_fee + subtotal;
   return (
-    <div className='w-full'>
-      <div className="text-2xl">
+    <div className='w-full '>
+      <div className="text-2xl  p-3">
         <Title text1={'CART'} text2={'TOTALS'}/>
       </div>
       <div className="flex flex-col gap-2 mt-2 text-sm">
         <div className="flex justify-between">
           <p>Subtotal</p>
-          <p>{currency.symbol}</p>
+          <p>{currency.symbol} {subtotal}</p>
         </div>
-        <hr/>
+        <hr className={`${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}/>
         <div className="flex justify-between">
          <p>shipping Fee</p>
          <p>{currency.symbol} {delivery_fee} </p> 
         </div>
-        <hr/>
+        <hr className={`${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}/>
         <div className="flex justify-between">
             <b>Total</b>
-            <b>{currency.symbol} {delivery_fee}</b>
+            <b>{currency.symbol} {total}</b>
         </div>
 
       </div>
