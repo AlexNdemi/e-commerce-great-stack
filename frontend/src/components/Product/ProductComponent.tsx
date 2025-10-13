@@ -111,7 +111,7 @@ export const ProductComponent: FC = () => {
             </div> 
             <p className={`mt-5 text-3xl font-medium ${theme === 'dark' ? 'text-[#f1f1f1]' : ''}`}> {currency.symbol} {productData.price}
             </p>
-            <p className={`mt-5 ${theme === 'dark' ? 'text-[#aaa]' : 'text-gray-500'} md:max-w-4/5`}>   {productData.description} 
+            <p className={`mt-5 ${theme === 'dark' ? 'text-[#aaa]' : ''} md:max-w-4/5`}>   {productData.description} 
             </p> 
             <div className="flex flex-col gap-4 my-8"> 
               <div className="flex flex-col gap-4"> 

@@ -2,14 +2,13 @@
 @theme{
   --color-mobilenav:hsl(0 0% 0% / 0.5);
   --color-navlinkDark-text:#d1d5dc;
-  --color-navlinkDark-hover:hsl(50, 100%, 69%);
+  --color-navlinkDark-hover:#f68b1e;;
   --color-navlinkLight-text:#364153;
   --color-navlinkLight-hover:hsl(189, 100%, 36%);
-  --color-textDark-100:#B7CAD4;
-  --color-textDark-100:#bfbfbf;
   --color-textDark-900:#EEF1F3;
-  --color-textLight-100:#6a7282;
-  --color-textLight-900:#364153;
+  --color-textDark-100:#6a7282;
+  --color-textLight-100:black;
+  --color-textLight-900:rgb(115,115,115);
 
 
 }
@@ -38,14 +37,15 @@
 :root[data-theme="dark"]{
   --text: #aaa;
   --background: #121212; 
-  --navlink-active:hsl(50, 100%, 49%);
+  --navlink-active:#e07e1b;
 
 }
 
 :root[data-theme="light"] {
-  --background: #ffffff;
-  --text: #213547;
-  --navlink-active:hsl(189, 100%, 26%);
+  --background:rgb(245,245,245);
+  --text: black;
+  --navlink-active:#e07e1b;
+;
   --navlink-text:#364153;
   
 }
@@ -58,11 +58,9 @@ body{
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-    --background: #ffffff;
-    --text: #213547;
-    --navlink-active:#007185;
+    --background: whitesmoke;
+    --text: rgb(0,0,0);
+    --navlink-active:#e07e1b;
   --color-textLight-100:#6a7282;
   --color-textLight-900:#364153; 
    

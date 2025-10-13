@@ -12,7 +12,7 @@ const Navbar: FC = () => {
   const navigate=useNavigate();
   console.log(cartCount)  
   return (
-   <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-white text-black'}`}>
+   <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-[rgb(245,245,245)] text-black'}`}>
       <div className='z-30'>
         <Link to="/">
           <img src={assets.logo} alt="Logo" className={`h-10 ${theme === 'dark'?'invert':''}`} />
@@ -37,13 +37,13 @@ const Navbar: FC = () => {
             fixed top-0 right-0 bottom-0 left-0 flex-col py-24 px-8 text-lg
             transition-transform duration-300 ease-out
             ${navOpen ? 'translate-x-[30%]' : 'translate-x-full md:translate-x-0'}
-            ${theme === 'dark' ? 'bg-[#121212]' : 'bg-white'} [&>*]:w-full
+            ${theme === 'dark' ? 'bg-[#121212]' : 'bg-[rgb(245,245,245)]'} [&>*]:w-full
           `}
         >
           <li>
             <NavLink 
               to={'/'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
+              className={`py-2 transition  hover:text-navlinkDark-hover bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               HOME
@@ -52,7 +52,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/collection'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
+              className={`py-2 transition hover:text-navlinkDark-hover bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               COLLECTION
@@ -61,7 +61,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/about'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
+              className={`py-2 transition hover:text-navlinkDark-hover bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               ABOUT
@@ -70,7 +70,7 @@ const Navbar: FC = () => {
           <li>
             <NavLink 
               to={'/contact'} 
-              className={`py-2 transition ${theme === 'dark' ? 'text-gray-300 hover:text-navlinkDark-hover' : 'text-gray-700 hover:text-navlinkLight-hover'} bold-on-hover`}
+              className={`py-2 transition hover:text-navlinkDark-hover bold-on-hover`}
               onClick={() => setNavOpen(false)}
             >
               CONTACT
@@ -156,18 +156,18 @@ const Navbar: FC = () => {
           </div> 
         </div>
         
-        <Link to={'/cart'} className="relative">
+        <Link to={'/cart'} className="relative hover:text-[#f68b1e]">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
           </svg>
 
-          {cartCount > 0 && <p className={`absolute left-[12px] py-0 px-1 top-[-4px] h-4 min-w-3 max-w-[18px] text-center leading-4 ${theme === 'dark'?"bg-white text-black": "bg-black text-white"} rounded-3xl text-[12px] font-extrabold inline-block`}>{cartCount>9?"9+":cartCount}</p>}
+          {cartCount > 0 && <p className={`absolute left-[12px] py-0 px-1 top-[-4px] h-4 min-w-3 max-w-[18px] text-center leading-4 text-white bg-[#f68b1e] rounded-3xl text-[12px] font-bold inline-block`}>{cartCount>9?"9+":cartCount}</p>}
         </Link>
         
         <button 
           aria-controls='primary-navigation' 
           aria-expanded={navOpen}
-          className='md:hidden z-30 p-2 bg-transparent border-0'
+          className={`md:hidden z-30 p-2 bg-transparent border-0 ${navOpen ? 'fixed right-16':'' }`}
           onClick={() => setNavOpen(!navOpen)}
         >
           {navOpen ? (

@@ -49,7 +49,7 @@ export const CartModal: FC<CartModalProps> = ({
                   <div 
                   className={
                   `flex justify-between items-center p-6 border-b ${
-                  theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                  theme === 'dark' ? 'border-[rgba(30,30,30,1.0)]':'border-[#DDD]'}`}>
                   <div>
                     <h3 className="text-xl font-bold">Please select a variation</h3>
                     <p className="text-sm opacity-75 mt-1">{productName}</p>

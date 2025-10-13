@@ -18,7 +18,7 @@ const CollectionComponent:FC = () => {
     
 
   return (
-    <div className={`flex flex-col dl:flex-row gap-1 sm:gap-10 pt-10 border-t ${theme === 'dark'?'border-[#3c4043]':'border-[rgba(13,13,13,0.2)]'}`}>
+    <div className={`flex flex-col dl:flex-row gap-1 sm:gap-10 pt-10 border-t ${theme === 'dark'?'border-[#3c4043]':'border-[rgb(219,219,219)]'}`}>
       <div className="min-w-60">
        <button 
         className="my-2 text-xl flex items-center cursor-pointer gap-2" 

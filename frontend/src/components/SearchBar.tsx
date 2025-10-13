@@ -17,14 +17,14 @@ const SearchBar:FC = () => {
   return <AnimatePresence>
     {showSearchBar?(
       <motion.div 
-        className={`border-t ${theme==="dark"?"border-t-[#3c4043]":" border-t-[rgba(13,13,13,0.2)]"} text-center flex items-center justify-center`}
+        className={`border-t ${theme==="dark"?"border-t-[#3c4043]":" border-t-[rgb(219,219,219)]"} text-center flex items-center justify-center`}
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: "auto", opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}
         transition={{ duration: 0.3 }}
         >
         
-        <div className={`inline-flex items-center justify-center px-5   py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2 ${theme==="dark"?"bg-[#333334]":"bg-[#F2F0F5]"}`}>
+        <div className={`inline-flex items-center justify-center px-5   py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2 ${theme==="dark"?"bg-[#333334]":"bg-[#fff]"}`}>
           <img className={`${theme === 'dark'?'invert':''} w-4 mr-2`}src={assets.search_icon} alt=""/>
           <input 
             ref={searchRef} 
