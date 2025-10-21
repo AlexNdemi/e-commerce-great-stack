@@ -4,6 +4,7 @@ import { useTheme } from '../../../hooks/useTheme';
 import { useCurrency } from '../../../hooks/useCurrency';
 import type { cartItem, Size } from '../../../context/shop/ShopTypes';
 import { useNavigate } from 'react-router-dom';
+import ReactDOm from 'react-dom'
 
 interface CartModalProps {
   isOpen: boolean;
@@ -25,16 +26,18 @@ export const CartModal: FC<CartModalProps> = ({
   const { theme } = useTheme();
   const { currency } = useCurrency();
   const navigate = useNavigate()
+  const portalRoot = document.getElementById('root-portal')
+  if (!portalRoot) return null
 
   if (!isOpen) return null;
 
   const totalItems = Object.values(cartItem.sizes).reduce((sum, qty) => sum + qty, 0);
   const totalPrice = totalItems * productPrice;
 
-  return (
+  return ReactDOm.createPortal(
     <>
       <div 
-        className="fixed inset-0 z-50 flex items-center justify-center">
+        className="fixed inset-0 z-50 flex items-center justify-center" aria-live='polite'>
           {/* Overlay */}
           <div 
             className="absolute inset-0 bg-[rgba(0,0,0,0.6)]" onClick={onClose} />
@@ -167,7 +170,6 @@ export const CartModal: FC<CartModalProps> = ({
             </div>
       </div>
       
-    </>
-    
-  );
+    </>,portalRoot
+    );
 };

@@ -5,22 +5,22 @@ import { assets } from '../assets/frontend_assets/assets';
 const OurPolicy:FC = () => {
   const{theme}=useTheme();
   return (
-    <div className={`flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center py-20 text-xs sm:text-sm md:text-base ${theme === "dark"?"text-textDark-900": "text-textLight-100"}`}>
+    <div className={`flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center py-20 text-xs sm:text-sm md:text-base`}>
       <div>
         <img src={assets.exchange_icon} className ={`w-12 m-auto mb-5 ${theme==='dark'?'invert':''}`}alt="" />
         <p className='font-semibold'>Easy exchage Policy</p>
-        <p className="text-gray-400">we offer hassle free exchange policy</p>
+        <p className="text-[var(--surfaceElementText)]">we offer hassle free exchange policy</p>
       </div>
       <div>
         <img src={assets.quality_icon} className ={`w-12 m-auto mb-5 ${theme==='dark'?'invert':''}`}alt="" />
         <p className='font-semibold'>Days Return Policy</p>
-        <p className="text-gray-400">we provide 7 days free return policy</p>
+        <p className="text-[var(--surfaceElementText)]">we provide 7 days free return policy</p>
       </div>
       <div>
         <img src={assets.support_img} className ={`w-12 m-auto mb-5 ${theme==='dark'?'invert':''}`}alt="" />
         
         <p className='font-semibold'>Best customer support</p>
-        <p className="text-gray-400">we provide 24/7 customer support</p>
+        <p className="text-[var(--surfaceElementText)]">we provide 24/7 customer support</p>
       </div> 
     </div>
   )

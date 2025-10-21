@@ -12,7 +12,7 @@ const Navbar: FC = () => {
   const navigate=useNavigate();
   console.log(cartCount)  
   return (
-   <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-[rgb(245,245,245)] text-black'}`}>
+   <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-[#E3E6E6] text-black'}`}>
       <div className='z-30'>
         <Link to="/">
           <img src={assets.logo} alt="Logo" className={`h-10 ${theme === 'dark'?'invert':''}`} />
@@ -37,7 +37,7 @@ const Navbar: FC = () => {
             fixed top-0 right-0 bottom-0 left-0 flex-col py-24 px-8 text-lg
             transition-transform duration-300 ease-out
             ${navOpen ? 'translate-x-[30%]' : 'translate-x-full md:translate-x-0'}
-            ${theme === 'dark' ? 'bg-[#121212]' : 'bg-[rgb(245,245,245)]'} [&>*]:w-full
+            ${theme === 'dark' ? 'bg-[hsl(180,6%,10%)]' : 'bg-[#E3E6E6]'} [&>*]:w-full
           `}
         >
           <li>
@@ -161,7 +161,32 @@ const Navbar: FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
           </svg>
 
-          {cartCount > 0 && <p className={`absolute left-[12px] py-0 px-1 top-[-4px] h-4 min-w-3 max-w-[18px] text-center leading-4 text-white bg-[#f68b1e] rounded-3xl text-[12px] font-bold inline-block`}>{cartCount>9?"9+":cartCount}</p>}
+          {cartCount > 0 && (
+  <span
+    className={`
+      absolute
+      -top-1.5
+      left-3
+      flex
+      items-center
+      justify-center
+      h-5
+      min-w-[18px]
+      px-1.5
+      bg-[#f68b1e]
+      text-black
+      text-[11px]
+      font-bold
+      rounded-full
+      shadow-sm
+      leading-none
+      tracking-tight
+    `}
+  >
+    {cartCount > 9 ? '9+' : cartCount}
+  </span>
+)}
+
         </Link>
         
         <button 

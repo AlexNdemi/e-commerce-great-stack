@@ -1,16 +1,18 @@
 import {type FC} from 'react'
 import { useTheme } from '../../../hooks/useTheme';
+import ReactDom from 'react-dom'
 interface deleteCartItemProps{
   onClose:()=>void;
   onConfirm:()=>void
 }
 const DeleteCartItem:FC<deleteCartItemProps> = ({onClose,onConfirm}) => {
   const {theme}=useTheme();
-
+ const portalRoot = document.getElementById('root-portal')
+  if (!portalRoot) return null 
   
-  return (
+  return ReactDom.createPortal(
     <div 
-        className="fixed inset-0 z-50 flex items-center justify-center">
+        className="fixed inset-0 z-50 flex items-center justify-center" aria-live='polite'>
           {/* Overlay */}
           <div 
             className="absolute inset-0 bg-[rgba(0,0,0,0.6)]" 
@@ -62,7 +64,7 @@ const DeleteCartItem:FC<deleteCartItemProps> = ({onClose,onConfirm}) => {
                   </button>
                 </div>
               </div> 
-    </div>
+    </div>,portalRoot
   )
 }
 

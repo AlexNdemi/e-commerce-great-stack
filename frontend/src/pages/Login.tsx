@@ -1,10 +1,11 @@
 import {type FC} from 'react'
+import { Form } from '../components/form/form'
 
 const Login:FC = () => {
   return (
-    <div>
-      
-    </div>
+    <>
+      <Form/>
+    </>
   )
 }
 

@@ -138,7 +138,7 @@ export const ProductComponent: FC = () => {
             {/* Add to Cart Button for empty cart */}
             {productCount === 0 && (
               <button 
-                className={`px-8 py-4 text-base font-medium rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+                className={`px-8 py-4 text-base font-medium rounded-lg transition-all duration-200 transform  ${
                   theme === 'dark' 
                     ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300' 
                     : 'bg-black text-white hover:bg-gray-800 active:bg-gray-700'
@@ -157,7 +157,7 @@ export const ProductComponent: FC = () => {
                   <button 
                     onClick={openCartModal}
                     className={
-                      `w-10 h-10 rounded-[7px] flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300': 'bg-black text-white hover:bg-gray-800 active:bg-gray-700'} shadow-lg`
+                      `w-10 h-10 rounded-[7px] flex items-center justify-center transition-all duration-200 transform ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300': 'bg-black text-white hover:bg-gray-800 active:bg-gray-700'} shadow-lg`
                      }
                     title="Remove one item"
                   >
@@ -185,7 +185,7 @@ export const ProductComponent: FC = () => {
                   {/* Add Button */}
                   <button
                     onClick={openCartModal}
-                    className={`w-10 h-10 rounded-[7px] flex items-center justify-center transition-all duration-200 transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300' 
+                    className={`w-10 h-10 rounded-[7px] flex items-center justify-center transition-all duration-200 transform  ${theme === 'dark' ? 'bg-white text-black hover:bg-gray-200 active:bg-gray-300' 
                     : 'bg-black text-white hover:bg-gray-800 active:bg-gray-700'
                 } shadow-lg`}
                     title="Add one more item"
@@ -203,7 +203,7 @@ export const ProductComponent: FC = () => {
                     theme === 'dark'
                       ? 'border-gray-600 hover:border-orange-500 bg-gray-800 hover:bg-gray-700'
                       : 'border-gray-300 hover:border-orange-400 bg-white hover:bg-gray-50'
-                  } transform hover:scale-105 active:scale-95`}
+                  } transform`}
                 >
                   🛒 View Selected Sizes 
                 </button>
