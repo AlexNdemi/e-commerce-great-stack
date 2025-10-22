@@ -33,8 +33,8 @@ return(
     {/* -----radio buttons ----- */}
     <fieldset className="grid gap-[inherit] grid-cols-[inherit]">
       <legend>Query Type</legend>
-      <div className="radio-group relative flex   gap-[1ch] fm:items-center border border-black rounded-[6px] py-[0.75em] px-[1.5em] ">
-        <div className="customRadio relative group pl-[35px] cursor-pointer mb-3 text-[22px] select-none">
+      <div className="radio-group relative flex gap-[1ch]  border border-black rounded-[6px] py-[0.75em] px-[1.5em] ">
+        <div className="customRadio relative group pl-[35px]  cursor-pointer mb-auto text-[22px] select-none">
           <input 
           type="radio" 
           id="general" 
@@ -42,12 +42,12 @@ return(
           value="General Enquiry"
           className="absolute opacity-0 cursor-pointer h-0 w-0"
           required/>
-          <span className="checkmark absolute group-hover:bg-[#ccc] top-0 left-0 h-[25px] w-[25px] bg-[#aaa] rounded-[50%] after:absolute after:hidden after:left-[9px] after:top-[9px] after:w-[9px] after:h-[8px] after:bg-[#fff] after:rounded-[50%] "></span>
+          <span className="checkmark absolute group-hover:bg-[#ccc] top-0 left-0 h-[25px] w-[25px] bg-[#aaa] rounded-[50%]  after:absolute after:hidden after:left-[9px] after:top-[9px] after:w-[9px] after:h-[8px] after:bg-[#fff] after:rounded-[50%] "></span>
         </div>
         <label htmlFor="general" className="after:absolute after:inset-0">General Enquiry</label>
       </div>
       <div className="radio-group relative flex gap-[1ch] fm:items-center border border-black rounded-[6px] py-[0.75em] px-[1.5em] ">
-        <div className="customRadio relative group pl-[35px] cursor-pointer mb-3 text-[22px] select-none">
+        <div className="customRadio relative group pl-[35px] cursor-pointer mb-auto text-[22px] select-none">
           <input 
           type="radio" 
           id="support" 
