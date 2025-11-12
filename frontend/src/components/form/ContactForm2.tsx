@@ -245,7 +245,7 @@ const ContactForm2 = () => {
                   name={field.name}
                   label="I consent to being contacted by the team"
                   checked={field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
+                  onChange={field.onChange}
                 />
               )}
             />
@@ -258,10 +258,11 @@ const ContactForm2 = () => {
           <button
             type="submit"
             disabled={!isValid || isSubmitting}
-            className="md:col-span-2 bg-[hsl(169,82%,27%)] text-white rounded-lg px-6 py-3 font-medium hover:bg-[hsl(187,24%,22%)] focus:outline-none disabled:opacity-50"
-          >
-            Submit
-          </button>
+            className="md:col-span-2 bg-[hsl(169,82%,27%)] text-white rounded-lg px-6 py-3 font-medium hover:bg-[hsl(187,24%,22%)] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[hsl(169,82%,27%)]"
+>
+  Submit
+</button>
+
         </form>
 
         <DevTool control={control} />

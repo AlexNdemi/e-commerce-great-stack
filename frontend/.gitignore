@@ -1,4 +1,46 @@
+# Dependencies
+/node_modules/
+
+# Build output
+/dist/
+/build/
+
 # Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Tests and coverage
+coverage/
+__tests__/
+__mocks__/
+*.spec.*
+*.test.*
+
+# Cache
+.cache/
+.parcel-cache/
+.next/
+out/
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml# Logs
 logs
 *.log
 npm-debug.log*

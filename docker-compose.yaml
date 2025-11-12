@@ -1,0 +1,98 @@
+services:
+  # 🐘 Yii2 container
+  yii-backend:
+    build: ./backend
+    container_name: yii-backend
+    ports:
+      - "${BACKEND_PORT}:80"
+    volumes:
+      - ./backend:/app
+      - ./backend/docker/yii-app-full.conf:/etc/apache2/sites-available/yii-app-full.conf
+      - ./backend/docker/yii-app-api.conf:/etc/apache2/sites-available/yii-app-api.conf
+    restart: unless-stopped
+
+    depends_on:
+      - db
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      MODE: ${MODE}
+
+    networks:
+      - app-network
+
+    command: >
+      bash -c "
+        a2dissite 000-default.conf &&
+        if [ \"$MODE\" = 'api' ]; then
+          a2ensite yii-app-api.conf;
+        else
+          a2ensite yii-app-full.conf;
+        fi &&
+        apache2-foreground
+      "
+
+  # ========================
+  # MYSQL DATABASE
+  # ========================
+  db:
+    image: mysql:8.4
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  # ========================
+  # PHPMYADMIN
+  # ========================
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      PMA_ARBITRARY: 1
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    networks:
+      - app-network
+
+  # ========================
+  # REACT FRONTEND
+  # ========================
+  react-frontend:
+    build: ./frontend
+    container_name: react-frontend
+    ports:
+      - "${FRONTEND_PORT}:5173"
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host"]
+    networks:
+      - app-network
+
+# ========================
+# NETWORKS & VOLUMES
+# ========================
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ContactForm() {
   return (
     <section className="p-8 bg-white text-[hsl(187,24%,22%)] rounded-2xl max-w-[700px] mx-auto font-[Karla]">

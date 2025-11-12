@@ -42,7 +42,7 @@ body {
 :root[data-theme="dark"]{
   --background: hsl(180, 6%, 10%);
   --text: hsl(180, 6%, 95%);
-  --border:hsl(180,6%,65%);
+  --border:hsl(180,6%,19%);
   --navlink-active:#e07e1b;
   --surfaceElementBg:hsl(180, 6%, 15%);
   --surfaceElementText:hsl(180, 6%, 70%);
@@ -55,7 +55,7 @@ body {
 :root[data-theme="light"] {
   --background:hsl(180, 6%, 90%);
   --text: hsl(180, 6%, 5%);
-  --border:hsl(180,6%,70);
+  --border:hsl(180, 6%, 79%);
   --navlink-active:hsl(30, 78%, 49%);
   --surfaceElementBg:hsl(180, 6%, 95%);
   --surfaceElementText:hsl(180, 6%, 30%);
@@ -107,7 +107,7 @@ fieldset:has([required]) legend,
   
 }
 
-.radio-group:has([type="radio"]:checked){
+/* .radio-group:has([type="radio"]:checked){
   background-color: hsl(148, 38%, 91%);
   border-color:hsl(169, 82%, 27%)
 }
@@ -116,7 +116,7 @@ fieldset:has([required]) legend,
 }
 .radio-group input:checked ~ .checkmark::after{
   display: block;
-}
+} */
 
 
 /* ::-webkit-scrollbar{

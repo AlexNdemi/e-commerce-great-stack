@@ -1,10 +1,11 @@
 import {type FC} from 'react'
+import { OrdersComponent } from '../components/orders/Orders'
 
 const Orders:FC = () => {
   return (
-    <div>
-      
-    </div>
+    <>
+      <OrdersComponent/>
+    </>
   )
 }
 
