@@ -1,4 +1,4 @@
-import {type FC} from 'react'
+ import {type FC} from 'react'
 import { useTheme } from '../../hooks/useTheme'
 interface CollectionFilterProps{
   id:string

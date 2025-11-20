@@ -1,9 +1,10 @@
-type Role = keyof typeof ROLES;
+export type Role = keyof typeof ROLES;
 type Permission = (typeof ROLES)[Role][number];
+export type user={id:string;role:Role}
 
 const ROLES ={
   admin:["view:orders","delete:orders","create:products","view:products","update:products","delete:products"],
-  user:["view:ownOrders","delete:ownOrders","update:ownOrders","create:orders"]
+  customer:["view:ownOrders","delete:ownOrders","update:ownOrders","create:orders"]
 } as const;
 
 export function hasPerrmission(

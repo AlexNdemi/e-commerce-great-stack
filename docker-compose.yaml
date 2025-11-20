@@ -86,6 +86,20 @@ services:
     command: ["npm", "run", "dev", "--", "--host"]
     networks:
       - app-network
+  
+  apache-proxy:
+    image: httpd:2.4
+    container_name: apache-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./proxy/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    depends_on:
+      - react-frontend
+      - yii-backend
+    networks:
+      - app-network
+
 
 # ========================
 # NETWORKS & VOLUMES

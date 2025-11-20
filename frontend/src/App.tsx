@@ -1,4 +1,5 @@
 import { ThemeProvider } from "./context/theme/ThemeProvider"
+import { AuthProvider } from "./components/AuthProvider.tsx";
 
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 import Loader from './components/loader/Loader.tsx'
@@ -22,24 +23,27 @@ function App() {
     <ThemeProvider>
        <ShopProvider>
          <QueryClientProvider client={queryClient}>
-          <Router>
-            <Suspense fallback={<Loader/>}>
-              <div className="px-4 sm:px-[5vw] md:px-[7w] lg:px-[9vw] max-w-[1280px]">
-                <ToastContainer/>
-                <Navbar/>
-                <SearchBar/>
-                <Routes>
-                  {appRoutes.map(({ path, element:Component }) => (
-                    <Route
-                      key={path}
-                      path={path}
-                      element={<Component/>} />
-                  ))}
-                </Routes>
-                <Footer/>
-              </div>
-            </Suspense>
-          </Router>
+          
+          <AuthProvider>
+            <Router>
+              <Suspense fallback={<Loader/>}>
+                <div className="px-4 sm:px-[5vw] md:px-[7w] lg:px-[9vw] max-w-[1280px]">
+                  <ToastContainer/>
+                  <Navbar/>
+                  <SearchBar/>
+                  <Routes>
+                    {appRoutes.map(({ path, element:Component }) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        element={<Component/>} />
+                    ))}
+                  </Routes>
+                  <Footer/>
+                </div>
+              </Suspense>
+            </Router>
+          </AuthProvider>
           <ReactQueryDevtools initialIsOpen={false}/>
          </QueryClientProvider>
        </ShopProvider>

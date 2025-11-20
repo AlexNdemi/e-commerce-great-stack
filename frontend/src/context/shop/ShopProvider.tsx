@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 import { produce } from "immer";
 
-export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {
+export const ShopProvider: FC<{ children: ReactNode }> = ({ children }) => {  
   const delivery_fee = 10;
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
