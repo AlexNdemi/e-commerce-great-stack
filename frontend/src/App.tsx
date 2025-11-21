@@ -14,6 +14,7 @@ import Footer from "./components/Footer.tsx";
 import SearchBar from "./components/SearchBar.tsx";
 import { ToastContainer} from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 function App() {
 
@@ -32,12 +33,18 @@ function App() {
                   <Navbar/>
                   <SearchBar/>
                   <Routes>
-                    {appRoutes.map(({ path, element:Component }) => (
+                    {appRoutes.map(({ path, element: Component, protected: isProtected }) => {
+                      const pageElement = isProtected ? (
+                        <ProtectedRoute>
+                          <Component />
+                        </ProtectedRoute>
+                      ): <Component />;return (
                       <Route
                         key={path}
                         path={path}
-                        element={<Component/>} />
-                    ))}
+                        element={pageElement}
+                      />);
+                    })}
                   </Routes>
                   <Footer/>
                 </div>

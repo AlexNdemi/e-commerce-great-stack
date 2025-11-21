@@ -25,15 +25,16 @@ export const ROUTES = {
 
 // config array
 export const appRoutes = [
-  { path: ROUTES.HOME, element: Home },
-  { path: ROUTES.ABOUT, element: About  },
-  { path: ROUTES.CART, element: Cart  },
-  { path: ROUTES.COLLECTION, element: Collection  },
-  { path: ROUTES.CONTACT, element: Contact  },
-  { path: ROUTES.LOGIN, element: Login  },
-  { path: ROUTES.ORDERS, element: Orders  },
-  { path: ROUTES.PLACE_ORDER, element: PlaceOrder  },
-  { path: ROUTES.PRODUCT, element: Product  },
+  { path: ROUTES.HOME, element: Home, protected: false },
+  { path: ROUTES.ABOUT, element: About, protected: false },
+  { path: ROUTES.CART, element: Cart, protected: false },
+  { path: ROUTES.COLLECTION, element: Collection, protected: false },
+  { path: ROUTES.CONTACT, element: Contact, protected: false },
+  { path: ROUTES.LOGIN, element: Login, protected: false },
+  { path: ROUTES.ORDERS, element: Orders, protected: true },
+  { path: ROUTES.PLACE_ORDER, element: PlaceOrder, protected: true },
+  { path: ROUTES.PRODUCT, element: Product, protected: false },
 ];
+
 
 
