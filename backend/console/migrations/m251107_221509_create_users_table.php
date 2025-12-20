@@ -21,8 +21,17 @@ class m251107_221509_create_users_table extends Migration
             'address'=>$this->string(),
             'region'=>$this->string(),
             'city'=>$this->string(),
-            'password_hash'=> $this->string()->notNull()
+            'status' => $this->smallInteger()->notNull()->defaultValue(10),            
+            'password_hash'=> $this->string()->notNull(),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
+
         ]);
+
+        $this->createIndex('idx-users-email', '{{%users}}', 'email');
+        $this->createIndex('idx-users-status', '{{%users}}', 'status');
+
+
     }
 
     /**

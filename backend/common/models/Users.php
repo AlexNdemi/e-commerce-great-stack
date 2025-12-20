@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\web\IdentityInterface;
+
 
 /**
  * This is the model class for table "{{%users}}".
@@ -15,16 +18,25 @@ use Yii;
  * @property string|null $address
  * @property string|null $region
  * @property string|null $city
+ * @property int $status
+ * @property string|null $mobile_no
  * @property string $password_hash
+ * @property string|null $uuid
  */
-class Users extends \yii\db\ActiveRecord
+class Users extends \yii\db\ActiveRecord 
 {
-
     /**
      * ENUM field values
      */
-    const ROLE_CUSTOMER = 'customer';
-    const ROLE_ADMIN = 'admin';
+    private const ROLE_CUSTOMER = 'customer';
+    private const ROLE_ADMIN = 'admin';
+
+
+    /**
+     *STATUS  field values
+     */
+    private const STATUS_DELETED = 0;
+    private const STATUS_ACTIVE = 10;
 
     /**
      * {@inheritdoc}
@@ -34,20 +46,52 @@ class Users extends \yii\db\ActiveRecord
         return '{{%users}}';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['role', 'firstname', 'lastname', 'address', 'region', 'city'], 'default', 'value' => null],
-            [['role'], 'string'],
-            [['email', 'password_hash'], 'required'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['role', 'firstname', 'lastname', 'address', 'region', 'city', 'mobile_no'], 'default', 'value' => null],
+            [['role', 'uuid'], 'string'],
+            [['email', 'password_hash','uuid'], 'required'],
             [['role'], 'default','value' => 'customer'],
-            [['firstname', 'lastname', 'email', 'address', 'region', 'city', 'password_hash'], 'string', 'max' => 255],
+            ['mobile_no', 'match', 'pattern' => '^\+(?<telephoneCountryCode>[1-9]\d{0,2})(?<telephoneNumber>\d{4,14})$', 'message' => 'Invalid format.Use international format, like +254712345678..'],
+            [['firstname', 'lastname', 'email', 'address', 'region', 'city','uuid', 'password_hash'], 'string', 'max' => 255],
             ['role', 'in', 'range' => array_keys(self::optsRole())],
             [['email'], 'unique'],
         ];
+    }
+
+
+    public static function findActiveUser($id)
+    {
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
@@ -58,11 +102,14 @@ class Users extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'role' => 'Role',
+            'status' =>'Status',
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'email' => 'Email',
             'address' => 'Address',
             'region' => 'Region',
+            'mobile_no'=>'Mobile No',
+            'uuid'=>'Uuid',
             'city' => 'City',
             'password_hash' => 'Password Hash',
         ];
@@ -122,5 +169,69 @@ class Users extends \yii\db\ActiveRecord
     public function setRoleToAdmin()
     {
         $this->role = self::ROLE_ADMIN;
+    }
+
+
+    /**
+     * column status ENUM value labels
+     * @return string[]
+     */
+    public static function optsStatus()
+    {
+        return [
+            self::STATUS_ACTIVE => 'active',
+            self::STATUS_DELETED => 'deleted',
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function displayStatus()
+    {
+        return self::optsStatus()[$this->status];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatusActive()
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function setStatusToActive()
+    {
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatusDeleted()
+    {
+        return $this->status === self::STATUS_DELETED;
+    }
+
+    public function setStatusToDeleted()
+    {
+        $this->status = self::STATUS_DELETED;
+    }
+
+    public static function getStatusActive()
+    {
+        return self::STATUS_ACTIVE;
+    }
+
+    public static function getStatusDeleted(){
+        return self::STATUS_DELETED;
+    }
+
+    public static function getRoleCustomer(){
+        return self::ROLE_CUSTOMER;
+    }
+
+    public static function getRoleAdmin(){
+        return self::ROLE_ADMIN;
     }
 }

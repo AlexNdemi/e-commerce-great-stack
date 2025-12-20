@@ -1,7 +1,7 @@
 import {type FC} from 'react'
 import { assets } from '../../assets/frontend_assets/assets'
 import { useTheme } from '../../hooks/useTheme'
-import { ImageWithSkeleton} from './ImageWithSkeleton'
+import { Image} from './ImageWithSkeleton'
 
 const Hero:FC = () => {
   const {theme}=useTheme();
@@ -23,7 +23,7 @@ const Hero:FC = () => {
         </div>
       </div>
       {/* Hero Right Side */}
-      <ImageWithSkeleton src={assets.hero_img} alt={'hero'} className='w-full sm:w-1/2'/>
+      <Image src={assets.hero_img} alt={'hero'} className='w-full sm:w-1/2'/>
     </div>
   )
 }

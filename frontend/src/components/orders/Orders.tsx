@@ -1,6 +1,6 @@
 import  { type FC } from 'react'
 import Title from '../ui/Title'
-import { ImageWithSkeleton } from '../ui/ImageWithSkeleton';
+import { Image } from '../ui/ImageWithSkeleton';
 import { useShop } from '../../hooks/useShop';
 import { useCurrency } from '../../hooks/useCurrency';
 
@@ -19,7 +19,7 @@ export const OrdersComponent:FC = () => {
               key={index} 
               className="py-4 border-x  border-[var(--border)] flex flex-col md:flex-row md:items-center md:justify-around gap-4 bg-[var(--surfaceElementBg)]">
                 <div className='flex items-start gap-6 text-sm'>
-                  <ImageWithSkeleton className='w-16 sm:w-20' src={item.image[0]} alt=""/>
+                  <Image className='w-16 sm:w-20' src={item.image[0]} alt=""/>
                   <div>
                     <p className='sm:text-base font-medium'>{item.name}</p>
                     <div className="flex items-center gap-3 text-base">

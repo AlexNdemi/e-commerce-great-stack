@@ -1,14 +1,10 @@
 import {type FC} from 'react'
-import { Form } from '../components/form/form'
-import ContactForm from '../components/form/ContactForm'
-import ContactForm2 from '../components/form/ContactForm2'
+import LoginForm from '../components/form/LoginForm'
 
 const Login:FC = () => {
   return (
     <>
-      {/* <Form/> */}
-      {/* <ContactForm/> */}
-      <ContactForm2/>
+      <LoginForm/>
     </>
   )
 }

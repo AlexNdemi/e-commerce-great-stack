@@ -1,11 +1,10 @@
 import {type FC} from 'react'
+import AboutComponent from '../components/AboutComponent'
 
 
 const About:FC = () => {
   return (
-    <div>
-
-    </div>
+    <AboutComponent/>
   )
 }
 

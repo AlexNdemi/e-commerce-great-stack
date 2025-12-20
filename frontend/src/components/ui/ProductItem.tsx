@@ -3,7 +3,7 @@ import { type product } from '../../context/shop/ShopTypes'
 import { Link } from 'react-router-dom'
 import { useCurrency } from '../../hooks/useCurrency'
 import { scrollToTop } from '../../utils/scrollToTop'
-import { ImageWithSkeleton } from './ImageWithSkeleton'
+import { Image } from './ImageWithSkeleton'
 export type ProductsItemProp = Pick<product,"_id" | "image" | "name" | "price">
 
 const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
@@ -15,7 +15,7 @@ const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
       onClick={() => scrollToTop(false)}
       className={`cursor-pointer`}>
       <div className="overflow-hidden">
-         <ImageWithSkeleton
+         <Image
             className=''
             src={image[0]}
             alt={`Product ${_id}`}

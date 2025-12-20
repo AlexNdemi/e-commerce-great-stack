@@ -18,6 +18,7 @@ export const ROUTES = {
   COLLECTION: "/collection",
   CONTACT: "/contact",
   LOGIN: "/login",
+  
   ORDERS: "/orders",
   PLACE_ORDER: "/place-order",
   PRODUCT: "/product/:id",

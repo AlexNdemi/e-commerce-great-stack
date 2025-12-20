@@ -3,7 +3,7 @@ import useCartData from './CartComponent.hooks';
 import Title from '../ui/Title';
 import { useShop } from '../../hooks/useShop';
 import { useCurrency } from '../../hooks/useCurrency';
-import { ImageWithSkeleton } from '../ui/ImageWithSkeleton';
+import { Image } from '../ui/ImageWithSkeleton';
 import { useTheme } from '../../hooks/useTheme';
 import type { Size } from '../../context/shop/ShopTypes';
 import DeleteCartItem from './deleteCartItem/DeleteCartItem';
@@ -66,7 +66,7 @@ const CartComponent: FC = () => {
                     <div className="flex flex-col sm:flex-row gap-6">
                       {/* Product Image & Info */}
                       <Link to={`/product/${productData?._id}`} className='group flex-shrink-0'>
-                        <ImageWithSkeleton
+                        <Image
                           src={productData?.image[0] || ''}
                           alt={`Product ${index + 1}`}
                           className='w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-lg'

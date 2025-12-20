@@ -1,6 +1,8 @@
 services:
   # 🐘 Yii2 container
   yii-backend:
+    env_file:
+      - .env
     build: ./backend
     container_name: yii-backend
     ports:
@@ -10,7 +12,6 @@ services:
       - ./backend/docker/yii-app-full.conf:/etc/apache2/sites-available/yii-app-full.conf
       - ./backend/docker/yii-app-api.conf:/etc/apache2/sites-available/yii-app-api.conf
     restart: unless-stopped
-
     depends_on:
       - db
     environment:
@@ -19,10 +20,8 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       MODE: ${MODE}
-
     networks:
       - app-network
-
     command: >
       bash -c "
         a2dissite 000-default.conf &&
@@ -83,10 +82,15 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: ["npm", "run", "dev", "--", "--host"]
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
     networks:
       - app-network
-  
+    environment:
+      - VITE_HOST=0.0.0.0
+
+  # ========================
+  # APACHE PROXY
+  # ========================
   apache-proxy:
     image: httpd:2.4
     container_name: apache-proxy
@@ -99,7 +103,7 @@ services:
       - yii-backend
     networks:
       - app-network
-
+    user: "0:0"
 
 # ========================
 # NETWORKS & VOLUMES
