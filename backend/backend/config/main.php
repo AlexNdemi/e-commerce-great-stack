@@ -13,8 +13,13 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'class' => \yii\symfonymailer\Mailer::class,
+    ],
     'components' => [
+        'mailer' =>[
+
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
             'parsers' => [

@@ -21,9 +21,9 @@ const registerSchema = z.object({
     .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i, "Invalid UUID v4 format")
 }).refine((data) => data.password === data.repeatPassword, {
   // Refine the schema at the object level
-  message: "Passwords do not match", // Error message for non-matching passwords
-  path: ["repeatPassword"],          // Path where the error should be displayed (under the repeat password input)
-});;
+  message: "Passwords do not match",
+  path: ["repeatPassword"],          
+});
 
 const RegisterForm: FC = () => {
   type FormValues = z.infer<typeof registerSchema>;
@@ -51,7 +51,7 @@ const RegisterForm: FC = () => {
   async function onSubmit(data: FormValues) {
     try {
       setGeneralError(null);
-      await signup(data.firstname,data.lastname,data.email, data.password,data.repeatPassword, data.uuid);
+      signup(data.firstname,data.lastname,data.email, data.password,data.repeatPassword, data.uuid);
       
       // Success - navigation handled by AuthProvider/Router
       
@@ -97,8 +97,8 @@ const RegisterForm: FC = () => {
             <input
               id="firstname"
               {...register("firstname")}
-              className={`border rounded-lg px-6 py-3 ${
-                errors.firstname ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.firstname ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
             />
             {errors.firstname && (
@@ -112,8 +112,8 @@ const RegisterForm: FC = () => {
             <input
               id="lastname"
               {...register("lastname")}
-              className={`border rounded-lg px-6 py-3 ${
-                errors.firstname ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.lastname ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
             />
             {errors.lastname && (
@@ -129,8 +129,8 @@ const RegisterForm: FC = () => {
               type="email"
               id="email"
               {...register("email")}
-              className={`border rounded-lg px-6  py-3 ${
-                errors.email ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.email ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
               placeholder="you@example.com"
               autoComplete="email"
@@ -149,8 +149,8 @@ const RegisterForm: FC = () => {
               type="password"
               id="password"
               {...register("password")}
-              className={`border rounded-lg px-6  py-3 ${
-                errors.password ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.password ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
               placeholder="At least 8 characters"
               autoComplete="new-password"
@@ -169,8 +169,8 @@ const RegisterForm: FC = () => {
               type="password"
               id="repeatPassword"
               {...register("repeatPassword")}
-              className={`border rounded-lg px-6  py-3 ${
-                errors.repeatPassword ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.repeatPassword ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
               placeholder="At least 8 characters"
               autoComplete="new-password"
@@ -203,7 +203,7 @@ const RegisterForm: FC = () => {
             
             <p className="text-sm text-gray-500 mt-4 text-center">
               Already have an account?{" "}
-              <a href="/login" className="text-[hsl(169,82%,27%)] hover:underline">
+              <a href="/login" className="text-[#f68b1e] hover:underline">
                 Sign in here
               </a>
             </p>

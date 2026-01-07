@@ -5,6 +5,8 @@ const Home = lazy(() => import("../pages/Home"));
 const Cart = lazy(() => import("../pages/Cart"));
 const Contact = lazy(() => import("../pages/Contact"));
 const Login = lazy(() => import("../pages/Login"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const ForgortPassword = lazy(()=> import("../pages/ForgotPassword"));
 const PlaceOrder = lazy(() => import("../pages/PlaceOrder"));
 const Product = lazy(() => import("../pages/Product"));
 const About = lazy(() => import("../pages/About"));
@@ -18,7 +20,8 @@ export const ROUTES = {
   COLLECTION: "/collection",
   CONTACT: "/contact",
   LOGIN: "/login",
-  
+  FORGOT_PASSWORD:"/forgot-password",
+  RESET_PASSWORD:"/reset-password",
   ORDERS: "/orders",
   PLACE_ORDER: "/place-order",
   PRODUCT: "/product/:id",
@@ -32,6 +35,8 @@ export const appRoutes = [
   { path: ROUTES.COLLECTION, element: Collection, protected: false },
   { path: ROUTES.CONTACT, element: Contact, protected: false },
   { path: ROUTES.LOGIN, element: Login, protected: false },
+  { path:ROUTES.FORGOT_PASSWORD, element:ForgortPassword,protected:false},
+  { path:ROUTES.RESET_PASSWORD,element:ResetPassword,protected:false},
   { path: ROUTES.ORDERS, element: Orders, protected: true },
   { path: ROUTES.PLACE_ORDER, element: PlaceOrder, protected: true },
   { path: ROUTES.PRODUCT, element: Product, protected: false },

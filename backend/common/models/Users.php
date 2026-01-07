@@ -21,7 +21,9 @@ use yii\web\IdentityInterface;
  * @property int $status
  * @property string|null $mobile_no
  * @property string $password_hash
- * @property string|null $uuid
+ * @property string $uuid
+ * @property int|null $created_at
+ * @property int|null $updated_at  
  */
 class Users extends \yii\db\ActiveRecord 
 {
@@ -36,6 +38,7 @@ class Users extends \yii\db\ActiveRecord
      *STATUS  field values
      */
     private const STATUS_DELETED = 0;
+    private const STATUS_INACTIVE = 9;
     private const STATUS_ACTIVE = 10;
 
     /**
@@ -64,8 +67,8 @@ class Users extends \yii\db\ActiveRecord
             [['role', 'firstname', 'lastname', 'address', 'region', 'city', 'mobile_no'], 'default', 'value' => null],
             [['role', 'uuid'], 'string'],
             [['email', 'password_hash','uuid'], 'required'],
-            [['role'], 'default','value' => 'customer'],
-            ['mobile_no', 'match', 'pattern' => '^\+(?<telephoneCountryCode>[1-9]\d{0,2})(?<telephoneNumber>\d{4,14})$', 'message' => 'Invalid format.Use international format, like +254712345678..'],
+            ['role', 'default','value' => self::ROLE_CUSTOMER],
+            ['mobile_no', 'match', 'pattern' => '/^\+(?:[1-9]\d{0,2})(?:\d{4,14})$/', 'message' => 'Invalid format.Use international format, like +254712345678..'],
             [['firstname', 'lastname', 'email', 'address', 'region', 'city','uuid', 'password_hash'], 'string', 'max' => 255],
             ['role', 'in', 'range' => array_keys(self::optsRole())],
             [['email'], 'unique'],
@@ -78,7 +81,7 @@ class Users extends \yii\db\ActiveRecord
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    public static function findByEmail($email)
+    public static function findByEmail($email): Users|null
     {
         return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
@@ -181,6 +184,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             self::STATUS_ACTIVE => 'active',
             self::STATUS_DELETED => 'deleted',
+            self::STATUS_INACTIVE => 'inactive'
         ];
     }
 
@@ -195,22 +199,35 @@ class Users extends \yii\db\ActiveRecord
     /**
      * @return bool
      */
-    public function isStatusActive()
+    public function isStatusActive(): bool
     {
         return $this->status === self::STATUS_ACTIVE;
+    }
+
+     /**
+     * @return bool
+     */
+    public function isStatusInactive()
+    {
+        return $this->status === self::STATUS_INACTIVE;
+    }
+
+      /**
+     * @return bool
+     */
+    public function isStatusDeleted(): bool
+    {
+        return $this->status === self::STATUS_DELETED;
+    }
+
+    public function setStatusToInactive()
+    {
+        $this->status = self::STATUS_INACTIVE;
     }
 
     public function setStatusToActive()
     {
         $this->status = self::STATUS_ACTIVE;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStatusDeleted()
-    {
-        return $this->status === self::STATUS_DELETED;
     }
 
     public function setStatusToDeleted()
@@ -225,6 +242,10 @@ class Users extends \yii\db\ActiveRecord
 
     public static function getStatusDeleted(){
         return self::STATUS_DELETED;
+    }
+
+    public static function getStatusInactive(){
+        return self::STATUS_INACTIVE;
     }
 
     public static function getRoleCustomer(){

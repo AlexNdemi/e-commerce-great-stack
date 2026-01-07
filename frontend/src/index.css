@@ -1,9 +1,21 @@
-@import "tailwindcss";
+/* Outfit: Variable Font (100-900) */
 @font-face {
-  font-family: "Karla";
-  src: url("/assets/fonts/Karla-VariableFont_wght.ttf") format("truetype");
-  font-weight: 400 700;
+  font-family: 'Outfit';
+  src: url('./fonts/Outfit-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
+
+/* Prata: Regular (400) */
+@font-face {
+  font-family: 'Prata';
+  src: url('./fonts/Prata-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@import "tailwindcss";
 
 body {
   font-family: "Karla", sans-serif;
@@ -11,11 +23,9 @@ body {
 }
 
 @theme{
- 
   --color-navlink-active:#e07e1b;
-
-
 }
+
 @custom-variant pn (@media (max-width: 36.875em));
 @custom-variant dl (@media (min-width:57.5em));
 @custom-variant fx (@media (min-width:77.5em));
@@ -47,6 +57,8 @@ body {
   --surfaceElementBg:hsl(180, 6%, 15%);
   --surfaceElementText:hsl(180, 6%, 70%);
   --surfaceElementLight:hsl(180, 6%, 10%);
+  --inputAccent:oklch(76% 0.14 205);
+  --inputAccent:hsl(30, 92%, 54%);
    
   
   
@@ -60,6 +72,9 @@ body {
   --surfaceElementBg:hsl(180, 6%, 95%);
   --surfaceElementText:hsl(180, 6%, 30%);
   --surfaceElementLight:hsl(180, 6%, 100%);
+  --inputAccent:oklch(55% 0.24 260);
+  --inputAccent:#f8982d;
+  
   
   
 }

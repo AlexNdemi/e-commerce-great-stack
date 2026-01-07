@@ -22,10 +22,10 @@ const ProductItem:FC<ProductsItemProp> = ({_id,image,name,price})=> {
             imageClassName='hover:scale-110 transition ease-in-out'
           /> 
       </div>
-      <p className="pt-3 pb-1 text-sm">
+      <p className="pt-3 pb-1 px-2 text-sm">
         {name}
       </p>
-      <p className="text-sm font-medium text-[var(--text)]">{currency.symbol} {price}</p> 
+      <p className="text-sm font-medium px-2 pb-1 text-[var(--text)]">{currency.symbol} {price}</p> 
     </Link>
   )
 }

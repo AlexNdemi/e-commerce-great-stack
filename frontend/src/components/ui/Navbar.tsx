@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, useEffect, useRef, type FC } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { assets } from '../../assets/frontend_assets/assets.ts';
 import { useTheme } from '../../hooks/useTheme.ts';
@@ -8,16 +8,19 @@ import { ROUTES } from '../../components/config/routes';
 
 const Navbar: FC = () => {
   const [navOpen, setNavOpen] = useState<boolean>(false);
+  const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
   const { theme, toggleTheme } = useTheme();
   const { setShowSearchBar, cartCount } = useShop();
   const { user, logout, isRefreshing } = useAuth();
   const navigate = useNavigate();
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Handle logout
   const handleLogout = async () => {
     try {
       await logout();
       setNavOpen(false);
+      setUserMenuOpen(false);
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -26,12 +29,27 @@ const Navbar: FC = () => {
   // Navigate to orders or login
   const handleOrdersClick = () => {
     setNavOpen(false);
+    setUserMenuOpen(false);
     if (user) {
       navigate(ROUTES.ORDERS);
     } else {
       navigate(ROUTES.LOGIN, { state: { from: ROUTES.ORDERS } });
     }
   };
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [userMenuOpen]);
 
   return (
     <header className={`flex items-center justify-between p-4 mb-8 ${theme === 'dark' ? ' text-white' : 'bg-[#E3E6E6] text-black'}`}>
@@ -314,11 +332,16 @@ const Navbar: FC = () => {
 
         {/* User Menu - Desktop Only */}
         {user ? (
-          // Logged in: Show dropdown with profile options
-          <div className="hidden md:block group relative">
+          <div ref={userMenuRef} className="hidden dl:block relative">
             <button 
-              className="p-2 hover:text-[#f68b1e] transition-colors"
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
+                theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 hover:bg-gray-750'
+                  : 'bg-white border-gray-300 hover:bg-gray-50'
+              }`}
               aria-label="User menu"
+              aria-expanded={userMenuOpen}
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -326,38 +349,62 @@ const Navbar: FC = () => {
                 viewBox="0 0 24 24" 
                 strokeWidth="1.5" 
                 stroke="currentColor" 
-                className="w-5 h-5 lg:w-6 lg:h-6"
+                className="w-5 h-5"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
+              <span className="text-sm font-medium">
+                Hi, {user.email?.split('@')[0] || 'user'}
+              </span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth="2" 
+                stroke="currentColor" 
+                className={`w-4 h-4 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
             </button>
 
-            <div className={`group-hover:block hidden absolute dropdown-menu right-0 pt-4 z-40`}>
-              <div className={`flex flex-col gap-2 w-36 py-3 px-5 rounded shadow-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-gray-300' : 'bg-white border-gray-200 text-gray-500'}`}>
-                <p className="text-xs font-semibold border-b pb-2 mb-1 truncate">
-                  {user.email}
-                </p>
+            {userMenuOpen && (
+              <div 
+                className={`absolute right-0 top-full mt-2 z-40 w-48 py-2 rounded-lg shadow-lg border animate-in fade-in slide-in-from-top-2 duration-200 ${
+                  theme === 'dark' 
+                    ? 'bg-gray-800 border-gray-700 text-gray-300' 
+                    : 'bg-white border-gray-200 text-gray-700'
+                }`}
+              >
                 <button
                   onClick={handleOrdersClick}
-                  className="text-left cursor-pointer hover:text-blue-500 transition-colors"
+                  className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                    theme === 'dark'
+                      ? 'hover:bg-gray-700'
+                      : 'hover:bg-gray-100'
+                  }`}
                 >
-                  Orders
+                  My Orders
                 </button>
+                <div className={`h-px ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
                 <button
                   onClick={handleLogout}
                   disabled={isRefreshing}
-                  className="text-left cursor-pointer hover:text-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full text-left px-4 py-2.5 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                    theme === 'dark'
+                      ? 'hover:bg-red-900/20 hover:text-red-400'
+                      : 'hover:bg-red-50 hover:text-red-600'
+                  }`}
                 >
                   {isRefreshing ? 'Logging out...' : 'Logout'}
                 </button>
               </div>
-            </div> 
+            )}
           </div>
         ) : (
-          // Not logged in: Show login button
           <button
             onClick={() => navigate(ROUTES.LOGIN)}
-            className="hidden md:block px-4 py-2 bg-[#f68b1e] text-white text-sm font-medium rounded-lg hover:bg-[#e07a0e]  transition-colors"
+            className="hidden md:block px-4 py-2 bg-[#f68b1e] text-white text-sm font-medium rounded-lg hover:bg-[#e07a0e] transition-colors"
           >
             Login
           </button>

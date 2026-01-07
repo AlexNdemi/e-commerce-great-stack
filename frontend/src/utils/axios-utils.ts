@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
-const API_BASE = 'http://localhost/api';
+const API_BASE = '/api';
 
 const api = axios.create({
   baseURL: API_BASE,

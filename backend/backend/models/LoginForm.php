@@ -32,12 +32,12 @@ class LoginForm extends Model
         }
     }
 
-    public function getUser()
-    {
-        if ($this->_user === null) {
-            $this->_user = Users::findByEmail($this->email);
-        }
-
-        return $this->_user;
+   public function getUser()
+{
+    if ($this->_user === null) {
+        $this->_user = Users::findByEmail($this->email);
     }
+    
+    return $this->_user;
+}
 }

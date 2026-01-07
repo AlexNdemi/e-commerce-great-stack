@@ -5,7 +5,7 @@ namespace backend\filters;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use common\models\Users;
-use services\JwtService;
+use backend\services\JwtService;
 
 class JwtHttpBearerAuth extends HttpBearerAuth
 {

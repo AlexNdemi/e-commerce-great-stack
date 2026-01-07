@@ -4,6 +4,7 @@ import { z } from "zod";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../context/auth/AuthContext';
+import { useLocation } from 'react-router-dom';
 import { handleYiiErrors, getYiiErrorMessage } from '../../utils/YiiErrorHandler';
 
 // Zod schema for login
@@ -25,6 +26,10 @@ const LoginForm: FC = () => {
     resolver: zodResolver(loginSchema),
     mode: "onChange",
   });
+  
+  const location = useLocation();
+  const successMessage = location.state?.message;
+
 
   const { register, control, handleSubmit, formState, setError } = form;
   const { errors,  isSubmitting } = formState;
@@ -34,7 +39,7 @@ const LoginForm: FC = () => {
   async function onSubmit(data: FormValues) {
     try {
       setGeneralError(null);
-      await login(data.email, data.password);
+       login(data.email, data.password);
       
       // Success - redirect handled by AuthProvider/Router
       
@@ -56,6 +61,7 @@ const LoginForm: FC = () => {
     }
   }
 
+
   return (
     <div className="min-h-screen bg- py-8 px-4">
       <div className="max-w-md mx-auto bg-[var(--surfaceElementBg)] text-[var(--surfaceElementText)] rounded-2xl p-8 shadow-lg">
@@ -63,6 +69,12 @@ const LoginForm: FC = () => {
           Sign In
         </h1>
 
+        {/* Success Message Display */}
+        {successMessage && (
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-green-700 text-sm font-medium">{successMessage}</p>
+          </div>
+        )}
         {/* General Error Message */}
         {generalError && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -84,8 +96,8 @@ const LoginForm: FC = () => {
               type="email"
               id="email"
               {...register("email")}
-              className={`border rounded-lg px-6 text-black py-3 ${
-                errors.email ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.email ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
               placeholder="you@example.com"
               autoComplete="email"
@@ -104,8 +116,8 @@ const LoginForm: FC = () => {
               type="password"
               id="password"
               {...register("password")}
-              className={`border rounded-lg px-6 text-black py-3 ${
-                errors.password ? "border-red-500" : "border-[hsl(186,15%,59%)]"
+              className={`bg-[var(--background)] border-none outline-none focus:shadow-[0px_0px_2px_1px_var(--inputAccent)] rounded-lg px-6 py-3 ${
+                errors.password ? "shadow-[0px_0px_2px_1px_rgb(251,44,54)]" : ""
               }`}
               placeholder="Enter your password"
               autoComplete="current-password"
@@ -119,7 +131,7 @@ const LoginForm: FC = () => {
           <div className="text-right">
             <a 
               href="/forgot-password" 
-              className="text-sm text-[hsl(169,82%,27%)] hover:underline"
+              className="text-sm text-[#f68b1e] hover:underline"
             >
               Forgot password?
             </a>
@@ -137,7 +149,7 @@ const LoginForm: FC = () => {
             
             <p className="text-sm  mt-4 text-center">
               Don't have an account?{" "}
-              <a href="/register" className="text-[hsl(169,82%,27%)] hover:underline">
+              <a href="/register" className="text-[#f68b1e] hover:underline">
                 Register here
               </a>
             </p>

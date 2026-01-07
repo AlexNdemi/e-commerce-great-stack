@@ -43,7 +43,7 @@ const MainLayout = () => {
 
             {/* Column 2 - Quick Links */}
             <div>
-              <h3 className={`font-semibold mb-4 ${theme === "dark"?"":"text-[hsl(187,24%,22%)]"}`}>Quick Links</h3>
+              <h3 className={`font-semibold mb-4 text-[#f68b1e]`}>Quick Links</h3>
               <ul className={`space-y-2 text-sm`}>
                 <li>
                   <Link to={ROUTES.HOME} className={`${theme === "dark"?"hover:text-[hsl(180,6%,95%)] text-[#aaa]":"text-gray-600 hover:text-[hsl(169,82%,27%)]"}`}>
@@ -70,7 +70,7 @@ const MainLayout = () => {
 
             {/* Column 3 - Support */}
             <div>
-              <h3 className={`font-semibold mb-4 ${theme === "dark"?"":"text-[hsl(187,24%,22%)]"}`}>Support</h3>
+              <h3 className={`font-semibold mb-4 text-[#f68b1e]`}>Support</h3>
               <ul className="space-y-2 text-sm">
                 <li>
                   <a href="#" className={`${theme === "dark"?"hover:text-[hsl(180,6%,95%)] text-[#aaa]":"text-gray-600 hover:text-[hsl(169,82%,27%)]"}`}>
@@ -97,7 +97,7 @@ const MainLayout = () => {
 
             {/* Column 4 - Newsletter */}
             <div>
-              <h3 className={`font-semibold mb-4 ${theme === "dark"?"":"text-[hsl(187,24%,22%)]"}`}>Get In Touch</h3>
+              <h3 className={`font-semibold mb-4 text-[#f68b1e]`}>Get In Touch</h3>
               <ul className="flex flex-col">
                 <li className={`${theme === "dark"?"hover:text-[hsl(180,6%,95%)] text-[#aaa]":"text-gray-600 hover:text-[hsl(169,82%,27%)]"}`}>+1-212-456-7890</li>
                 <li className={`${theme === "dark"?"hover:text-[hsl(180,6%,95%)] text-[#aaa]":"text-gray-600 hover:text-[hsl(169,82%,27%)]"}`}>contact@foreveryou.com</li>
@@ -107,7 +107,7 @@ const MainLayout = () => {
           </div>
 
           {/* Copyright */}
-          <div className={`${theme==="dark"?"border-t border-[rgba(255,255,255,0.2)]  text-gray-600":"border-gray-300"} mt-8 pt-8 text-center text-sm `}>
+          <div className={`${theme==="dark"?"border-t border-[rgba(255,255,255,0.2)]":"border-gray-300"} mt-8 pt-8 text-center text-sm `}>
             © {new Date().getFullYear()} Your Company. All rights reserved.
           </div>
         </div>

@@ -12,7 +12,7 @@ interface CollectionFilterProps{
 const CollectionFilter :FC<CollectionFilterProps>= ({id,Category,values,showFilter,selectedValues,handleCheckboxChange}) => {
   const{theme}=useTheme();
   return (
-    <div id={id} className={`${theme==="dark"?"border-gray-500":"border-gray-300"} border pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'}`}>
+    <div id={id} className={`bg-[var(--surfaceElementBg)] pl-5 py-3 mt-6 ${showFilter ? '' : 'hidden'}`}>
       <p className="mb-3 text-sm font-medium">{Category}</p>
       <div className="flex flex-col gap-4 text-sm font-light">
         {values.map((value, index) => (
@@ -29,7 +29,7 @@ const CollectionFilter :FC<CollectionFilterProps>= ({id,Category,values,showFilt
               className="flex items-center cursor-pointer"
               htmlFor={`${id}-item-${index}`}
             >
-              <span className={`inline-block w-4 h-4 border-2 mr-2 flex-shrink-0 relative ${selectedValues.includes(value) ? 'bg-[#F16E00] border-[#F16E00]' : theme==="dark"?"border-gray-500":"border-gray-300"}`}>
+              <span className={`inline-block w-4 h-4 mr-2 flex-shrink-0 relative border ${theme === "dark"?"border-gray-600":"border-gray-400"} ${selectedValues.includes(value) ? 'bg-[#F16E00] border-none' : 'bg-[var(--background)]'}`}>
                 {selectedValues.includes(value) && (
                   <svg className="absolute inset-0 text-white" viewBox="0 0 24 24" fill="none">
                     <path d="M5 13L9 17L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

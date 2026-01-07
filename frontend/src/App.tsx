@@ -4,7 +4,6 @@ import router from "./components/config/router.tsx";
 import { QueryClientProvider,QueryClient } from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 import { ShopProvider } from "./context/shop/ShopProvider.tsx";
-import Footer from "./components/Footer.tsx";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ErrorBoundary from "./pages/ErrorBoundary.tsx";
@@ -49,7 +48,7 @@ function App() {
           <div className="px-4 sm:px-[5vw] md:px-[7w] lg:px-[9vw] max-w-[1280px]">
             <ToastContainer/>
               <RouterProvider router={router} />
-            <Footer/>
+            
           </div>
         <ReactQueryDevtools initialIsOpen={false}/>
         </QueryClientProvider>

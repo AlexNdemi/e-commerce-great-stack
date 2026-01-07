@@ -9,8 +9,8 @@ interface SectionProps{
 const CollectionHeader:FC<SectionProps> = ({description,text1,text2}) => {
 
   return (
-     <div className='my-10'>
-      <div className="text-center py-8 text-3xl">
+     <div className=''>
+      <div className="text-center py-4 text-3xl">
         <Title text1={text1}text2={text2}/>
         <p className={`w-3/4 m-auto text-xs sm:text-sm md:text-base`}>{description}</p>
       </div>

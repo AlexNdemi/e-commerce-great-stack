@@ -248,7 +248,7 @@ export const ProductComponent: FC = () => {
       </div>
 
       {/* -----Description & Review Section -----*/}
-      <div className="mt-20">
+      <div className="mt-20 mb-10">
         <div className="flex">
           <b className={`border px-5 py-3 text-sm ${
             theme === 'dark'

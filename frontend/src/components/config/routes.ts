@@ -11,6 +11,8 @@ const Product = lazy(() => import("../../pages/Product"));
 const About = lazy(() => import("../../pages/About"));
 const Collection = lazy(() => import("../../pages/Collection"));
 const Orders = lazy(() => import("../../pages/Orders"));
+const ResetPassword = lazy(() => import("../../pages/ResetPassword"));
+const ForgortPassword = lazy(()=> import("../../pages/ForgotPassword"));
 
 // Route paths
 export const ROUTES = {
@@ -21,13 +23,15 @@ export const ROUTES = {
   CONTACT: "/contact",
   LOGIN: "/login",
   REGISTER:"/register",
+  FORGOT_PASSWORD:"/forgot-password",
+  RESET_PASSWORD:"/reset-password",
   ORDERS: "/orders",
   PLACE_ORDER: "/place-order",
   PRODUCT: "/product/:id",
 } as const;
 
 // Auth pages that should not be saved as return paths
-export const AUTH_PAGES = [ROUTES.LOGIN,ROUTES.REGISTER] as const;
+export const AUTH_PAGES = [ROUTES.LOGIN,ROUTES.REGISTER,ROUTES.FORGOT_PASSWORD,ROUTES.RESET_PASSWORD] as const;
 
 // Route configuration type
 export interface RouteConfig {
@@ -51,6 +55,7 @@ export const appRoutes: RouteConfig[] = [
     protected: false,
     title: "Register"
   },
+
   { 
     path: ROUTES.ABOUT, 
     element: About, 
@@ -80,6 +85,18 @@ export const appRoutes: RouteConfig[] = [
     element: Login, 
     protected: false,
     title: "Login"
+  },
+  { 
+    path:ROUTES.FORGOT_PASSWORD, 
+    element:ForgortPassword,
+    protected:false,
+    title:"Forgot password"
+  },
+  { 
+      path:ROUTES.RESET_PASSWORD,
+      element:ResetPassword,
+      protected:false,
+      title:"Reset Password"
   },
   { 
     path: ROUTES.ORDERS, 
