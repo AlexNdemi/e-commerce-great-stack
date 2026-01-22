@@ -24,13 +24,25 @@ class LoginForm extends Model
 
     public function validatePassword($attribute, $params): void
     {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect email or password.');
-            }
+        if ($this->hasErrors()) {
+            return;
+
         }
-    }
+
+        $user = $this->getUser();
+        
+        if (!$user || !$user->validatePassword($this->password)) {
+            $this->addError('login', 'Incorrect email or password.');
+            return;
+        }
+
+        if ($user->activation_hash !== null) {
+            $this->addError('activation', 'Your account is not activated. Please check your email.');
+        }
+        
+
+        
+}
 
    public function getUser()
 {

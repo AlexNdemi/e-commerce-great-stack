@@ -5,7 +5,10 @@ import { DevTool } from "@hookform/devtools";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { handleYiiErrors, getYiiErrorMessage } from '../../utils/YiiErrorHandler';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useResetPassword, useValidateResetToken } from '../../hooks/api/useUserData';
+import { useValidateResetToken } from '../../hooks/api/useUserData';
+import { useResetPassword } from '../../hooks/api/useUserData';
+import { useRateLimitTimer } from '../../hooks/useRateLimitTimer';
+import axios from 'axios';
 
 
 
@@ -22,38 +25,39 @@ const resetPasswordSchema = z.object({
   path: ["repeatPassword"],          
 });
 
-const RequestResetPasswordForm: FC = () => {
+const ResetPasswordForm: FC = () => {
   type FormValues = z.infer<typeof resetPasswordSchema>;
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get('token');
-  const selector =searchParams.get('selector');
-  const [tokenValid, setTokenValid] = useState(false);
-  const {
-    isSuccess:validateResetTokenSuccessful,error:validateResetTokenFailed,data:validateResetTokenData
-  } = useValidateResetToken(token,selector)
+  const selector = searchParams.get('selector');
+
+  const { isLocked, displayText, startCooldown } = useRateLimitTimer('resend-activation', 60);
   
   const [generalError, setGeneralError] = useState<string | null>(null);
 
+  const {
+    isSuccess: validateResetTokenSuccessful,
+    isError: validateResetTokenFailed,
+    data: validateResetTokenData,
+    isLoading: isValidating
+  } = useValidateResetToken(token, selector);
+
+  // Simplified useEffect that responds to query state changes
   useEffect(() => {
     if (!token || !selector) {
-    setGeneralError("Invalid reset link");
-    return;
+      setGeneralError("Invalid reset link");
+      return;
     }
 
-    const validateToken = async () => {
-        
-        if (validateResetTokenData?.valid && validateResetTokenSuccessful) {
-          setTokenValid(true);
-        } else if (validateResetTokenFailed) {
-          setGeneralError('This password reset link is invalid or has expired');
-        }
+    if (validateResetTokenSuccessful && validateResetTokenData?.valid) {
+      setGeneralError(null);
+    } else if (validateResetTokenFailed) {
+      setGeneralError('This password reset link is invalid or has expired');
     }
+  }, [token, selector, validateResetTokenData, validateResetTokenSuccessful, validateResetTokenFailed]);
 
-    validateToken();
-  }, [token,selector,validateResetTokenData,validateResetTokenSuccessful,validateResetTokenFailed]);
-
-  const resetPasswordMutation= useResetPassword();
+  const resetPasswordMutation = useResetPassword();
   
   const form = useForm<FormValues>({
     defaultValues: {
@@ -67,57 +71,66 @@ const RequestResetPasswordForm: FC = () => {
   });
 
   const { register, control, handleSubmit, formState, setError } = form;
-  const { errors,  isSubmitting } = formState;
+  const { errors, isSubmitting } = formState;
 
-  
-  
   async function onSubmit(data: FormValues) {
     try {
       setGeneralError(null);
-      const {token,selector,password,password_confirm}=data
-      resetPasswordMutation.mutateAsync({token,selector,password,password_confirm});
+      const { token, selector, password, password_confirm } = data;
+      await resetPasswordMutation.mutateAsync({ token, selector, password, password_confirm });
 
       navigate('/login', { 
-      state: { message: "Your password has been reset successfully. Please log in." } 
-    });
-      
-      
-    } catch (error) {
+        state: { message: "Your password has been reset successfully. Please log in." } 
+      });
+    } catch (error:unknown) {
+       if (axios.isAxiosError(error) && error.response?.status === 429) {
+        const retryAfter = parseInt(error.response.headers['retry-after'] as string) || 60;
+        startCooldown(retryAfter);
+      }
+
       const handled = handleYiiErrors<FormValues>(
         error,
         setError,
         setGeneralError,
-        ['token','selector','password','password_confirm'] // Valid form fields
+        ['token', 'selector', 'password', 'password_confirm']
       );
        
       if (!handled) {
-        setGeneralError(getYiiErrorMessage(error, "ResetPassword failed. Please try again."));
+        setGeneralError(getYiiErrorMessage(error, "Reset password failed. Please try again."));
       }
     }
   }
-if (isSubmitting) {
+
+  // Show loading state while validating
+  if (isValidating || (!token || !selector)) {
     return (
       <div className="min-h-screen flex items-center justify-center py-8 px-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#f68b1e] mx-auto"></div>
-          <p className="mt-4 text-[var(--surfaceElementText)]">Validating reset link...</p>
+          <p className="mt-4 text-[var(--surfaceElementText)]">
+            {(!token || !selector) ? "Invalid reset link" : "Validating reset link..."}
+          </p>
         </div>
       </div>
     );
   }
 
   // Invalid token state
-  if (!tokenValid) {
+  if (validateResetTokenFailed || (validateResetTokenData && !validateResetTokenData.valid)) {
     return (
       <div className="min-h-screen py-8 px-4">
         <div className="max-w-md mx-auto">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p className="text-red-700 text-sm">{generalError}</p>
+            <p className="text-red-700 text-sm">
+              {generalError  || "Invalid or expired reset link"}
+            </p>
           </div>
           <div className="text-center">
             <Link
-              to="/forgot-password" className="text-[#f68b1e] hover:text-[#e07a0e] font-medium">
-                Request a new reset link
+              to="/forgot-password" 
+              className="text-[#f68b1e] hover:text-[#e07a0e] font-medium"
+            >
+              Request a new reset link
             </Link>
           </div>
         </div>
@@ -188,10 +201,10 @@ return (
         <div>
           <button
             type="submit"
-            disabled={ isSubmitting}
+            disabled={ isSubmitting || isLocked}
             className="w-full bg-[#f68b1e] hover:bg-[#e07a0e] text-white rounded-lg px-6 py-3 font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[rgb(246,139,97)] transition-colors"
           >
-            {isSubmitting ? 'Reseting your password...' : 'Reset your password'}
+            {isSubmitting ? 'Reseting your password...' :isLocked? displayText: 'Reset your password'}
           </button>
         </div>
       </form>
@@ -202,4 +215,4 @@ return (
 );
 }
 
-export default RequestResetPasswordForm;
+export default ResetPasswordForm;

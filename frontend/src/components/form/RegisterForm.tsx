@@ -6,6 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../../context/auth/AuthContext';
 import { handleYiiErrors, getYiiErrorMessage } from '../../utils/YiiErrorHandler';
+import { useRateLimitTimer } from '../../hooks/useRateLimitTimer';
+import axios from 'axios';
+
+
 
 // Create unique ID outside component
 const uniqueId = uuidv4();
@@ -27,6 +31,8 @@ const registerSchema = z.object({
 
 const RegisterForm: FC = () => {
   type FormValues = z.infer<typeof registerSchema>;
+
+  const { isLocked, displayText, startCooldown } = useRateLimitTimer('resend-activation', 60);
   
   const [generalError, setGeneralError] = useState<string | null>(null);
   
@@ -47,15 +53,20 @@ const RegisterForm: FC = () => {
   const { errors,  isSubmitting } = formState;
   
   const { signup, isSigningUp } = useAuth();
+ 
+
   
   async function onSubmit(data: FormValues) {
     try {
       setGeneralError(null);
-      signup(data.firstname,data.lastname,data.email, data.password,data.repeatPassword, data.uuid);
+      await signup(data.firstname,data.lastname,data.email, data.password,data.repeatPassword, data.uuid);
       
-      // Success - navigation handled by AuthProvider/Router
       
-    } catch (error) {
+    } catch (error:unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 429) {
+        const retryAfter = parseInt(error.response.headers['retry-after'] as string) || 60;
+        startCooldown(retryAfter);
+      }
       // Use utility to handle Yii backend errors
       const handled = handleYiiErrors<FormValues>(
         error,
@@ -195,10 +206,10 @@ const RegisterForm: FC = () => {
           <div>
             <button
               type="submit"
-              disabled={ isSubmitting || isSigningUp}
+              disabled={ isSubmitting || isSigningUp || isLocked}
               className="w-full bg-[#f68b1e] hover:bg-[#e07a0e] text-white rounded-lg px-6 py-3 font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[rgb(246,139,97)] transition-colors"
             >
-              {isSubmitting || isSigningUp ? 'Creating Account...' : 'Create Account'}
+              {isSubmitting || isSigningUp ? 'Creating Account...':isLocked ? displayText: 'Create Account'}
             </button>
             
             <p className="text-sm text-gray-500 mt-4 text-center">

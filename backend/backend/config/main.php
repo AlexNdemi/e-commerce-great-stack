@@ -57,38 +57,44 @@ return [
             'errorAction' => 'site/error',
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'enableStrictParsing' => true, // Only defined routes work
-            'rules' => [
-                // Auth routes (public)
-                'POST auth/login' => 'auth/login',
-                'POST auth/signup' => 'auth/signup',
-                'GET auth/refresh' => 'auth/refresh',
-                'POST auth/logout' => 'auth/logout',
-                'GET auth/verify' => 'auth/verify',
-                
-                // Protected routes example
-                'GET profile' => 'profile/index',
-                'PUT profile' => 'profile/update',
-                
-                // Users resource (protected)
-                [
-                    'class' => \yii\rest\UrlRule::class,
-                    'controller' => 'users',
-                    'pluralize' => false,
-                    'except' => ['create', 'delete'], // Signup handled separately
-                    'extraPatterns' => [
-                        'GET me' => 'me', // Custom endpoint for current user
-                    ],
-                ],
-                
-                // Default error route
-                '<controller:[\w-]+>/<action:[\w-]+>' => '<controller>/<action>',
+        'enablePrettyUrl' => true,
+        'showScriptName' => false,
+        'enableStrictParsing' => true,
+        'baseUrl' => '',
+        'rules' => [
+        // Auth routes (public)
+        'POST auth/login' => 'auth/login',
+        'POST auth/signup' => 'auth/signup',
+        'GET auth/refresh' => 'auth/refresh',
+        'POST auth/logout' => 'auth/logout',
+        'GET auth/verify' => 'auth/verify',
+        'GET auth/activate-account'=>'auth/activate-account',
+        
+        // Password reset routes - ADD THESE
+        'POST auth/request-password-reset' => 'auth/request-password-reset',
+        'GET auth/validate-reset-token' => 'auth/validate-reset-token',
+        'POST auth/reset-password' => 'auth/reset-password',
+        'POST auth/resend-activation'=>'auth/resend-activation',
+        
+        // Protected routes example
+        'GET profile' => 'profile/index',
+        'PUT profile' => 'profile/update',
+        
+        // Users resource (protected)
+        [
+            'class' => \yii\rest\UrlRule::class,
+            'controller' => 'users',
+            'pluralize' => false,
+            'except' => ['create', 'delete'],
+            'extraPatterns' => [
+                'GET me' => 'me',
             ],
         ],
+        
+        // Default error route
+        '<controller:[\w-]+>/<action:[\w-]+>' => '<controller>/<action>',
+    ],
+],
     ],
     'params' => $params,
-    
-    // CORS is now handled by Apache proxy - removed from here
 ];

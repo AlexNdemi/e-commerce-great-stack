@@ -4,8 +4,12 @@ import { z } from "zod";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../context/auth/AuthContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRateLimitTimer } from '../../hooks/useRateLimitTimer';
 import { handleYiiErrors, getYiiErrorMessage } from '../../utils/YiiErrorHandler';
+import { ROUTES } from '../config/routes';
+import axios from 'axios';
+
 
 // Zod schema for login
 const loginSchema = z.object({
@@ -17,6 +21,8 @@ const LoginForm: FC = () => {
   type FormValues = z.infer<typeof loginSchema>;
   
   const [generalError, setGeneralError] = useState<string | null>(null);
+
+  const { isLocked, displayText, startCooldown } = useRateLimitTimer('resend-activation', 60);
   
   const form = useForm<FormValues>({
     defaultValues: {
@@ -27,24 +33,35 @@ const LoginForm: FC = () => {
     mode: "onChange",
   });
   
-  const location = useLocation();
-  const successMessage = location.state?.message;
-
-
+  
   const { register, control, handleSubmit, formState, setError } = form;
   const { errors,  isSubmitting } = formState;
   
+  const location = useLocation();
+  const navigate = useNavigate()
   const { login, isLoggingIn } = useAuth();
+  
+  const returnTo = location.state?.returnTo; 
+  const sessionMessage = location.state?.message;
   
   async function onSubmit(data: FormValues) {
     try {
       setGeneralError(null);
-       login(data.email, data.password);
+      await login(data.email, data.password,returnTo);
       
       // Success - redirect handled by AuthProvider/Router
       
-    } catch (error) {
-      // Use utility to handle Yii backend errors
+    } catch (error:unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 429) {
+        const retryAfter = parseInt(error.response.headers['retry-after'] as string) || 60;
+        startCooldown(retryAfter);
+      }
+      if (axios.isAxiosError(error) && error.response?.status === 403 && error.response?.data?.error_type === 'inactive_account') {
+        navigate(ROUTES.RESEND_ACTIVATION,{ 
+        state: { 
+          message: error.response?.data?.message}})
+        return;
+      }
       const handled = handleYiiErrors<FormValues>(
         error,
         setError,
@@ -68,13 +85,14 @@ const LoginForm: FC = () => {
         <h1 className="text-2xl md:text-3xl font-bold  mb-6">
           Sign In
         </h1>
-
-        {/* Success Message Display */}
-        {successMessage && (
-          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-700 text-sm font-medium">{successMessage}</p>
-          </div>
+        {/* Display the "Session Expired" message if it exists */}
+        {
+          sessionMessage && (
+            <div className="mb-4 p-4 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg">
+              {sessionMessage}
+            </div>
         )}
+
         {/* General Error Message */}
         {generalError && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -141,10 +159,10 @@ const LoginForm: FC = () => {
           <div>
             <button
               type="submit"
-              disabled={ isSubmitting || isLoggingIn}
+              disabled={ isSubmitting || isLoggingIn || isLocked}
               className="w-full bg-[#f68b1e] hover:bg-[#e07a0e] text-white rounded-lg px-6 py-3 font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[rgb(246,139,97)] transition-colors"
             >
-              {isSubmitting || isLoggingIn ? 'Signing in...' : 'Sign In'}
+              {isSubmitting || isLoggingIn ? 'Signing in...' :isLocked ? displayText: 'Sign In'}
             </button>
             
             <p className="text-sm  mt-4 text-center">

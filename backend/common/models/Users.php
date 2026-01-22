@@ -21,6 +21,7 @@ use yii\web\IdentityInterface;
  * @property int $status
  * @property string|null $mobile_no
  * @property string $password_hash
+ * @property string $activation_hash
  * @property string $uuid
  * @property int|null $created_at
  * @property int|null $updated_at  
@@ -62,19 +63,31 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED,self::STATUS_INACTIVE]],
             [['role', 'firstname', 'lastname', 'address', 'region', 'city', 'mobile_no'], 'default', 'value' => null],
             [['role', 'uuid'], 'string'],
             [['email', 'password_hash','uuid'], 'required'],
             ['role', 'default','value' => self::ROLE_CUSTOMER],
             ['mobile_no', 'match', 'pattern' => '/^\+(?:[1-9]\d{0,2})(?:\d{4,14})$/', 'message' => 'Invalid format.Use international format, like +254712345678..'],
             [['firstname', 'lastname', 'email', 'address', 'region', 'city','uuid', 'password_hash'], 'string', 'max' => 255],
+            [['activation_hash'], 'default', 'value' => null],
+            [['activation_hash'], 'string', 'max' => 64],
             ['role', 'in', 'range' => array_keys(self::optsRole())],
             [['email'], 'unique'],
         ];
     }
 
+    public function generateActivationToken(): string
+    {
+        $rawToken = Yii::$app->security->generateRandomString(32);
+        $this->activation_hash = hash('sha256', $rawToken);
+        return $rawToken;
+    }
+    public function removeActivationHash(): void
+    {
+        $this->activation_hash = null;
+    }
 
     public static function findActiveUser($id)
     {
@@ -83,7 +96,7 @@ class Users extends \yii\db\ActiveRecord
 
     public static function findByEmail($email): Users|null
     {
-        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email]);
     }
 
     
@@ -115,6 +128,7 @@ class Users extends \yii\db\ActiveRecord
             'uuid'=>'Uuid',
             'city' => 'City',
             'password_hash' => 'Password Hash',
+            'activation_hash' => 'Activation Hash'
         ];
     }
 
@@ -254,5 +268,18 @@ class Users extends \yii\db\ActiveRecord
 
     public static function getRoleAdmin(){
         return self::ROLE_ADMIN;
+    }
+
+     public static function findByActivationToken($rawToken)
+    {
+        if (empty($rawToken)) {
+            return null;
+        }
+        
+        $hash = hash('sha256', $rawToken);
+
+        return static::findOne([
+            'activation_hash' => $hash
+        ]);
     }
 }

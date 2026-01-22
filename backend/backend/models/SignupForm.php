@@ -18,12 +18,13 @@ class SignupForm extends Model
 
     public $repeatPassword;
 
+
    public function rules()
 {
     return [
         [['email', 'password', 'repeatPassword', 'firstname', 'lastname'], 'required'],
         ['email', 'email'],
-        ['email', 'unique', 'targetClass' => Users::class],
+        [['email','activationHash'], 'unique', 'targetClass' => Users::class],
         ['password', 'string', 'min' => 8],
         ['repeatPassword', 'string', 'min' => 8],
         [['firstname', 'lastname'], 'string', 'min' => 1, 'max' => 255],
@@ -35,19 +36,39 @@ class SignupForm extends Model
 }
 
     public function signup()
-    {
+    {   
         if (!$this->validate()) {
             return null;
         }
-
         $user = new Users();
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->uuid = $this->uuid;
         $user->firstname = $this->firstname;
         $user->lastname=$this->lastname;
+        $user->status = Users::getStatusInactive();
+        $user->setStatusToInactive();
+        $rawToken = $user->generateActivationToken();
 
-        return $user->save() ? Users::findByEmail($this->email) : null;
+        if ($user->save()) {
+          $this->sendActivationEmail($user, $rawToken);  
+
+            return $user;
+        }
+
+        return null;
+    }
+    private function sendActivationEmail($user,$rawToken){
+      $activationUrl = Yii::$app->params['frontendUrl'] . 'activate-email?token=' . $rawToken;
+
+        Yii::$app->mailer->compose(
+            ['html' => 'activationToken-html', 'text' => 'activationToken-text'],
+            ['user' => $user, 'activationUrl' => $activationUrl] 
+        )
+        ->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->name])
+        ->setTo($this->email)
+        ->setSubject('Activate your account - ' . Yii::$app->name)
+        ->send();
     }
 
     public function validateUuidFormat($attribute, $params)

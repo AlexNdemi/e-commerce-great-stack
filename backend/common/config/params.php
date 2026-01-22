@@ -13,5 +13,5 @@ return [
     'jwtRefreshExpire' => getenv('JWT_REFRESH_EXPIRE') ?: 2592000, // 30 days default
     
     'cookieValidationKey' => getenv('COOKIE_VALIDATION_KEY'),
-    'frontendUrl'=> 'http://192.168.100.5:5173/'
+    'frontendUrl'=> 'http://192.168.100.5/'
 ];

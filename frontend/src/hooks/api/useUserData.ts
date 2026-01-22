@@ -8,6 +8,11 @@ export interface AuthResponse {
   token: AccessToken;
   user: user;
 }
+
+interface ResendActivationResponse{
+  success:string;
+  message:string;
+} 
 interface PasswordResponse{
   success:string;
   message:string;
@@ -21,8 +26,19 @@ interface VerifyTokenResponse {
   token: AccessToken;
   user: user;
 }
-interface ResetTokenResponse {
-  valid:boolean
+interface SignUpResponse {
+  success:boolean;
+  message:string;
+  email?:string
+}
+interface ResetPasswordTokenResponse {
+  valid:boolean,
+  message?:string;
+}
+
+interface ActivationTokenResponse {
+  valid:boolean,
+  message?:string;
 }
 
 const signupUser = async (
@@ -32,8 +48,8 @@ const signupUser = async (
   password: string,
   repeatPassword: string,
   uuid:string
-):Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('/auth/signup',{
+):Promise<SignUpResponse> => {
+  const response = await api.post<SignUpResponse>('/auth/signup',{
     email,
     password,
     repeatPassword,
@@ -43,6 +59,7 @@ const signupUser = async (
   });
   return response.data;
 }
+
 
 const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
   const response = await api.post<AuthResponse>('/auth/login', {
@@ -56,6 +73,11 @@ const resetPasswordRequest = async (email:string):Promise<PasswordResponse>=>{
   const response = await api.post<PasswordResponse>('/auth/request-password-reset',{
     email
   })
+  return response.data;
+}
+const resendActivation = async (email:string):Promise<ResendActivationResponse>=>{
+  const response = await api.post<ResendActivationResponse>('auth/resend-activation',{email}
+  )
   return response.data;
 }
 
@@ -75,11 +97,20 @@ const resetPassword = async (
   return response.data
  }
 
- const validateResetToken = async (token:string,selector:string):Promise<ResetTokenResponse>=>{
-   const response = await api.get<ResetTokenResponse>(`/auth/validate-reset-token?token=${token}&selector=${selector}`,{
-   })
-   return response.data
- }
+ const validateResetToken = async (token: string, selector: string): Promise<ResetPasswordTokenResponse> => {
+  const response = await api.get<ResetPasswordTokenResponse>(
+    `/auth/validate-reset-token?token=${encodeURIComponent(token)}&selector=${encodeURIComponent(selector)}`
+  );
+  return response.data;
+}
+
+ const activateAccountToken = async (token: string): Promise<ResetPasswordTokenResponse> => {
+  const response = await api.get<ActivationTokenResponse>(
+    `/auth/activate-account?token=${encodeURIComponent(token)}`
+  );
+  return response.data;
+}
+
 
 
 const refreshAuto = async (): Promise<RefreshResponse> => {
@@ -123,7 +154,22 @@ export const useResetPassword = (
   });
 
 } 
+export const useResendActivation = (
+  options?:UseMutationOptions < 
+  ResendActivationResponse,
+  Error,
+  {email:string}
+  >
+)=>{
+  return useMutation<
+    ResendActivationResponse,
+    Error,
+    {email:string}>({
+      mutationFn:({email}) => resendActivation(email),
+      ...options
+    })
 
+}
 export const useRequestResetPassword = (
    options?: UseMutationOptions <
     PasswordResponse, 
@@ -145,12 +191,27 @@ export const useRequestResetPassword = (
 export const useValidateResetToken = (
   token: string | null,
   selector: string | null,
-  options?:Omit<UseQueryOptions<ResetTokenResponse, Error>, 'queryKey' | 'queryFn'>
+  options?:Omit<UseQueryOptions<ResetPasswordTokenResponse, Error>, 'queryKey' | 'queryFn'>
 ) => {
-  return useQuery<ResetTokenResponse, Error>({
-    queryKey: ['validateResetToken', token],
+  return useQuery<ResetPasswordTokenResponse, Error>({
+    queryKey: ['validateResetToken', token,selector],
     queryFn: () => validateResetToken(token!,selector!),
     enabled: !!token && !!selector, 
+    retry: false, 
+    staleTime: 0, 
+    gcTime: 0, 
+    ...options
+  });
+}
+
+export const useActivateAccount = (
+  token: string | null,
+  options?:Omit<UseQueryOptions<ActivationTokenResponse, Error>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery<ActivationTokenResponse, Error>({
+    queryKey: ['activateAccountToken', token],
+    queryFn: () => activateAccountToken(token!),
+    enabled: !!token, 
     retry: false, 
     staleTime: 0, 
     gcTime: 0, 
@@ -205,7 +266,7 @@ export const useLoginUser = (
 
 export const useSignupUser = (
   options?: UseMutationOptions<
-    AuthResponse,
+    SignUpResponse,
     Error,
     {
       firstname:string,
@@ -217,7 +278,7 @@ export const useSignupUser = (
     }>
 )=>{
     return useMutation<
-    AuthResponse,
+    SignUpResponse,
     Error,
     {
       firstname:string,
@@ -244,6 +305,7 @@ export const useSignupUser = (
       ...options
     });
   };
+
 
 export const useLogoutUser = (
   options?: UseMutationOptions<

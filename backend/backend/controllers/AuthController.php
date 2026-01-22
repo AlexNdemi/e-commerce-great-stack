@@ -4,11 +4,14 @@ namespace backend\controllers;
 
 use Yii;
 use yii\rest\Controller;
+use yii\filters\Cors;
 use common\models\Users;
+use common\models\PasswordResetTokens;
 use backend\models\RefreshToken;
 use backend\models\LoginForm;
 use backend\models\SignupForm;
 use backend\models\PasswordResetRequestForm;
+use backend\models\ResendActivationForm;
 use backend\models\ResetPasswordForm;
 use backend\services\JwtService;
 
@@ -23,24 +26,50 @@ class AuthController extends Controller
 
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-        unset($behaviors['authenticator']);
+        $behaviors['corsFilter'] = [
+            'class' => Cors::class,
+        ];
+        $behaviors['rateLimiter'] = [
+            'class' => \backend\components\IpRateLimiter::class,
+            'actions' => ['login', 'signup', 'resend-activation'],
+            'limit' => 10,
+            'window' => 60,
+            'message' => 'Too many attempts from your IP. Please wait a minute.'
+        ];
+
+    
+        $behaviors['strictRateLimiter'] = [
+            'class' => \backend\components\IpRateLimiter::class,
+            'actions' => ['request-password-reset'],
+            'limit' => 3,
+            'window' => 300, // 5 minutes
+            'message' => 'Please wait 5 minutes before requesting another reset link.'
+        ];
+        
         return $behaviors;
     }
 
-    public function actionLogin()
-    {
-        $model = new LoginForm();
-        $model->load(Yii::$app->request->post(), '');
+   public function actionLogin()
+{
+    $model = new LoginForm();
+    $model->load(Yii::$app->request->post(), '');
 
-        if (!$model->validate()) {
-            Yii::$app->response->statusCode = 422;
-            return ['errors' => $model->getErrors()];
-        }
-
-        $user = $model->getUser();
-        return $this->handleSuccessfulAuth($user);
+    if (!$model->validate() && isset($model->getErrors()['activation'])) {
+        Yii::$app->response->statusCode = 403;
+        return [
+            'error_type' => 'inactive_account',
+            'message' => $model->getFirstError('activation')
+        ];
     }
+
+    if (!$model->validate()) {
+        Yii::$app->response->statusCode = 422;
+        return ['errors' => $model->getErrors()];
+    }
+
+    $user = $model->getUser();
+    return $this->handleSuccessfulAuth($user);
+}
 
     public function actionSignup()
     {
@@ -55,9 +84,14 @@ class AuthController extends Controller
         $user = $model->signup();
 
         if ($user) {
-            Yii::$app->response->statusCode = 201;
-            return $this->handleSuccessfulAuth($user);
-        }
+        Yii::$app->response->statusCode = 201;
+        // Do NOT log them in. Instead, return a message for the frontend.
+        return [
+            'success' => true,
+            'message' => 'Registration successful! Please check your email to activate your account.',
+            'email' => $user->email
+        ];
+    }
 
         Yii::$app->response->statusCode = 500;
         return ['error' => 'Unable to create user'];
@@ -220,36 +254,86 @@ class AuthController extends Controller
      * GET /auth/validate-reset-token?token=xxxxx
      */
     public function actionValidateResetToken()
-    {
-        $params = Yii::$app->request->queryParams;
-
-        // Access using array syntax
-        $token = $params['token'] ?? null; 
-        $selector = $params['selector'] ?? null;
-        
-        if (!$token || !$selector) {
-            Yii::$app->response->statusCode = 400;
+{
+    Yii::info('Validate reset token called', __METHOD__);
+    
+    $params = Yii::$app->request->queryParams;
+    $token = $params['token'] ?? null;
+    $selector = $params['selector'] ?? null;
+    
+    Yii::info("Token: $token, Selector: $selector", __METHOD__);
+    
+    if (!$token || !$selector) {
+        Yii::warning('Missing token or selector', __METHOD__);
+        Yii::$app->response->statusCode = 400;
         return [
             'valid' => false,
-            'error' => 'Invalid reset link'
+            'message' => 'Invalid reset link'
         ];
+    }
+    
+    
+    $resetToken = PasswordResetTokens::findValidResetToken($token, $selector);
+    
+    if (!$resetToken) {
+        Yii::warning('Token not found in database', __METHOD__);
+        Yii::$app->response->statusCode = 400;
+        return ['valid' => false, 'message' => 'Invalid or expired token'];
+    }
+    
+    Yii::info('Token validated successfully', __METHOD__);
+    return [
+        'valid' => true,
+        'message' => "Token validated successfully you can now go on to reset your password"
+    ];
 }
 
-        $tokenHash = hash('sha256', $token);
-        $resetToken = \common\models\PasswordResetTokens::findValidToken($tokenHash,$selector);
+public function actionResendActivation()
+{
+    $model = new ResendActivationForm();
+    $model->load(Yii::$app->request->post(), '');
 
-        if (!$resetToken) {
-            Yii::$app->response->statusCode = 400;
-            return ['valid' => false, 'error' => 'Invalid or expired token'];
-        }
-        return ['valid' => true];
+    // Even if the email doesn't exist, we return 200 OK with this message
+    if ($model->validate() && $model->sendEmail()) {
+        return [
+            'success' => true,
+            'message' => 'If an account exists with that email, a new activation link has been sent.'
+        ];
     }
 
-    /**
-     * Reset password with token
-     * POST /auth/reset-password
-     * Body: { "token": "xxxxx", "password": "newpass", "password_confirm": "newpass" }
-     */
+    // Only return errors for malformed emails (e.g. "not-an-email")
+    Yii::$app->response->statusCode = 422;
+    return ['errors' => $model->getErrors()];
+}
+
+public function actionActivateAccount($token)
+{
+    $user = Users::findByActivationToken($token);
+    
+    if (!$user) {
+        Yii::$app->response->statusCode = 400;
+        return ['valid' => false, 'message' => 'Invalid or expired activation link.'];
+    }
+
+    // Guard: If already active, just send them to login
+    if ($user->isStatusActive()) {
+        return ['valid' => true, 'message' => 'Account is already active.'];
+    }
+
+    $user->setStatusToActive();
+    $user->removeActivationHash(); // CLEAR THE HASH HERE
+
+    if ($user->save()) {
+        return ['valid' => true, 'message' => 'Account successfully activated!'];
+    }
+
+    Yii::$app->response->statusCode = 500;
+    return ['valid' => false, 'message' => 'Could not activate account. Please try again.'];
+}
+
+   
+
+    
     public function actionResetPassword()
     {
         $model = new ResetPasswordForm();

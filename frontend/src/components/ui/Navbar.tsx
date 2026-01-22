@@ -130,143 +130,249 @@ const Navbar: FC = () => {
       </nav>
 
       {/* Mobile Navigation Menu - Slide-in panel */}
-      <nav className="z-20 md:hidden">
-        <ul 
-          className={`
-            fixed top-0 right-0 bottom-0 left-0 
-            flex flex-col gap-6 py-24 px-8 text-lg
-            transition-transform duration-300 ease-out
-            ${navOpen ? 'translate-x-[30%]' : 'translate-x-full'}
-            ${theme === 'dark' ? 'bg-[hsl(180,6%,10%)]' : 'bg-[#E3E6E6]'}
-          `}
-        >
-          <li>
-            <NavLink 
-              to={'/'} 
-              className={`py-2 block transition hover:text-navlinkDark-hover bold-on-hover`}
-              onClick={() => setNavOpen(false)}
-            >
-              HOME
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to={'/collection'} 
-              className={`py-2 block transition hover:text-navlinkDark-hover bold-on-hover`}
-              onClick={() => setNavOpen(false)}
-            >
-              COLLECTION
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to={'/about'} 
-              className={`py-2 block transition hover:text-navlinkDark-hover bold-on-hover`}
-              onClick={() => setNavOpen(false)}
-            >
-              ABOUT
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to={'/contact'} 
-              className={`py-2 block transition hover:text-navlinkDark-hover bold-on-hover`}
-              onClick={() => setNavOpen(false)}
-            >
-              CONTACT
-            </NavLink>
-          </li>
-
-          {/* Theme Toggle - Mobile Only */}
-          <li className="border-t pt-4 mt-4">
-            <button 
-              onClick={() => {
-                toggleTheme();
-                setNavOpen(false);
-              }}
-              className="w-full py-2 flex items-center gap-3 transition hover:text-navlinkDark-hover"
-            >
-              {theme === 'light' ? (
-                <>
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    strokeWidth={1.5} 
-                    stroke="currentColor" 
-                    className="w-6 h-6"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" 
-                    />
-                  </svg>
-                  <span>DARK MODE</span>
-                </>
-              ) : (
-                <>
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    strokeWidth={1.5} 
-                    stroke="currentColor" 
-                    className="w-6 h-6"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" 
-                    />
-                  </svg>
-                  <span>LIGHT MODE</span>
-                </>
-              )}
-            </button>
-          </li>
-
-          {/* Auth Actions - Mobile Only */}
-          {user ? (
+      {/* Mobile Navigation Menu - Slide-in panel */}
+{/* Mobile Navigation Menu - Slide-in panel */}
+<nav className="z-20 md:hidden">
+  <ul 
+    className={`
+      fixed top-0 right-0 bottom-0 left-0 
+      flex flex-col gap-1 py-20 px-4 text-lg
+      transition-transform duration-300 ease-out
+      ${navOpen ? 'translate-x-[30%]' : 'translate-x-full'}
+      ${theme === 'dark' ? 'bg-[hsl(180,6%,10%)]' : 'bg-[#E3E6E6]'}
+    `}
+  >
+    <li>
+      <NavLink 
+        to={'/'} 
+        className="group block"
+        onClick={() => setNavOpen(false)}
+      >
+        {({ isActive }) => (
+          <div 
+            className={`
+              flex items-center gap-4 px-6 py-3 rounded-full transition-all duration-200
+              ${isActive ? 'font-bold' : ''}
+              group-hover:bg-[var(--surfaceElementBg)]
+            `}
+          >
+            {isActive ? (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                className="w-7 h-7"
+              >
+                <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
+                <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+              </svg>
+            ) : (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="w-7 h-7"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" 
+                />
+              </svg>
+            )}
+            <span className="text-xl">Home</span>
+          </div>
+        )}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink 
+        to={'/collection'} 
+        className="group block"
+        onClick={() => setNavOpen(false)}
+      >
+        {({ isActive }) => (
+          <div
+            className={`
+              flex items-center gap-4 px-6 py-3 rounded-full transition-all duration-200
+              ${isActive ? 'font-bold' : ''}
+              group-hover:bg-[var(--surfaceElementBg)]
+            `}
+          >
+            {isActive ? (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                className="w-7 h-7"
+              >
+                <path fillRule="evenodd" d="M3 6a3 3 0 0 1 3-3h2.25a3 3 0 0 1 3 3v2.25a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm9.75 0a3 3 0 0 1 3-3H18a3 3 0 0 1 3 3v2.25a3 3 0 0 1-3 3h-2.25a3 3 0 0 1-3-3V6ZM3 15.75a3 3 0 0 1 3-3h2.25a3 3 0 0 1 3 3V18a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-2.25Zm9.75 0a3 3 0 0 1 3-3H18a3 3 0 0 1 3 3V18a3 3 0 0 1-3 3h-2.25a3 3 0 0 1-3-3v-2.25Z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="w-7 h-7"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" 
+                />
+              </svg>
+            )}
+            <span className="text-xl">Collection</span>
+          </div>
+        )}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink 
+        to={'/about'} 
+        className="group block"
+        onClick={() => setNavOpen(false)}
+      >
+        {({ isActive }) => (
+          <div
+            className={`
+              flex items-center gap-4 px-6 py-3 rounded-full transition-all duration-200
+              ${isActive ? 'font-bold' : ''}
+              group-hover:bg-[var(--surfaceElementBg)]
+            `}
+          >
+            {isActive ? (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                className="w-7 h-7"
+              >
+                <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="w-7 h-7"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" 
+                />
+              </svg>
+            )}
+            <span className="text-xl">About</span>
+          </div>
+        )}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink 
+        to={'/contact'} 
+        className="group block"
+        onClick={() => setNavOpen(false)}
+      >
+        {({ isActive }) => (
+          <div
+            className={`
+              flex items-center gap-4 px-6 py-3 rounded-full transition-all duration-200
+              ${isActive ? 'font-bold' : ''}
+              group-hover:bg-[var(--surfaceElementBg)]
+            `}
+          >
+            {isActive ? (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                className="w-7 h-7"
+              >
+                <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+              </svg>
+            ) : (
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="w-7 h-7"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" 
+                />
+              </svg>
+            )}
+            <span className="text-xl">Contact</span>
+          </div>
+        )}
+      </NavLink>
+    </li>
+    
+    {/* Theme Toggle - Mobile Only */}
+    <li className="mt-4 pt-4 border-t border-[var(--border)]">
+      <button 
+        onClick={() => {
+          toggleTheme();
+          setNavOpen(false);
+        }}
+        className="w-full group"
+      >
+        <div className="flex items-center gap-4 px-6 py-3 rounded-full transition-all duration-200 group-hover:bg-[var(--surfaceElementBg)]">
+          {theme === 'light' ? (
             <>
-              <li className="border-t pt-4">
-                <div className="text-sm opacity-70 mb-2 px-2">
-                  Signed in as: {user.email}
-                </div>
-              </li>
-              <li>
-                <button
-                  onClick={handleOrdersClick}
-                  className="w-full py-2 text-left transition hover:text-navlinkDark-hover"
-                >
-                  MY ORDERS
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  disabled={isRefreshing}
-                  className="w-full py-2 text-left transition hover:text-red-500 disabled:opacity-50"
-                >
-                  {isRefreshing ? 'LOGGING OUT...' : 'LOGOUT'}
-                </button>
-              </li>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="w-7 h-7"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" 
+                />
+              </svg>
+              <span className="text-xl">Dark Mode</span>
             </>
           ) : (
-            <li className="border-t pt-4">
-              <button
-                onClick={() => {
-                  navigate(ROUTES.LOGIN);
-                  setNavOpen(false);
-                }}
-                className="w-full py-2 text-left transition hover:text-navlinkDark-hover font-semibold"
+            <>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="w-7 h-7"
               >
-                LOGIN
-              </button>
-            </li>
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" 
+                />
+              </svg>
+              <span className="text-xl">Light Mode</span>
+            </>
           )}
-        </ul>
-      </nav>
+        </div>
+      </button>
+    </li>
+  </ul>
+</nav>
       
       {/* Right Side Icons */}
       <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-shrink-0">

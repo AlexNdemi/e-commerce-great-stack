@@ -77,6 +77,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({
     setShowSessionExpiredModal(true);
   }, [location.pathname]);
 
+  
+
   const handleRefreshToken = useCallback(async (): Promise<string> => {
     try {
       const { data } = await triggerRefresh();
@@ -122,8 +124,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({
       clearAccessToken();
       setLoading(false);
       hasInitialized.current = true;
+      if (!isAuthPage(location.pathname)) {
+      navigate(ROUTES.LOGIN);
+  }
     }
-  }, [isVerifySuccess, isVerifyError, verifyData]);
+  }, [isVerifySuccess, isVerifyError, verifyData,navigate,location.pathname]);
 
   // 3. Proactive Token Refresh Timer
   useEffect(() => {
@@ -143,28 +148,40 @@ export const AuthProvider: FC<AuthProviderProps> = ({
 
   // --- Auth Actions ---
 
-  const login = useCallback(async (email: string, password: string) => {
-    const response = await loginMutation.mutateAsync({ email, password });
-    setToken(response.token);
-    setUser(response.user);
-    setAccessToken(response.token.token);
+  // Update the function signature to accept redirectPath
+const login = useCallback(async (email: string, password: string, redirectPath?: string) => {
+  const response = await loginMutation.mutateAsync({ email, password });
+  
+  setToken(response.token);
+  setUser(response.user);
+  setAccessToken(response.token.token);
+  
+  const destination = redirectPath || (returnPath !== ROUTES.LOGIN ? returnPath : ROUTES.HOME);
 
-    const destination = returnPath !== ROUTES.LOGIN ? returnPath : ROUTES.HOME;
-    navigate(destination, { replace: true });
-    setReturnPath(ROUTES.HOME);
-  }, [loginMutation, navigate, returnPath]);
+  navigate(destination, { replace: true });
+  
+  // Reset the returnPath state so it doesn't affect future logins
+  setReturnPath(ROUTES.HOME);
+}, [loginMutation, navigate, returnPath]);
 
   const signup = useCallback(async (
-    firstname: string, lastname: string, email: string, 
-    password: string, repeatPassword: string, uuid: string
+    firstname: string,
+    lastname: string,
+    email: string, 
+    password: string, 
+    repeatPassword: string, 
+    uuid: string
   ) => {
-    const response = await signupMutation.mutateAsync({
+     const response =await signupMutation.mutateAsync({
       firstname, lastname, email, password, repeatPassword, uuid,
     });
-    setToken(response.token);
-    setUser(response.user);
-    setAccessToken(response.token.token);
-    navigate(ROUTES.HOME, { replace: true });
+    // If your backend is set up to require activation:
+    navigate(ROUTES.ACTIVATION_LINK_SENT_TO_EMAIL, { 
+        state: { message: response.message ,
+        email:response.email           
+        }
+        
+    });
   }, [signupMutation, navigate]);
 
   const logout = useCallback(async () => {
@@ -183,7 +200,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({
   const contextValue: AuthContextType = useMemo(() => ({
     token,
     user,
-    loading: loading || (isVerifyingInitial && !hasInitialized.current),
+    loading: loading ||(isVerifyingInitial && !hasInitialized.current),
     isSigningUp: signupMutation.isPending,
     isLoggingIn: loginMutation.isPending,
     isRefreshing,
@@ -191,9 +208,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({
     signup,
     logout
   }), [
-    token, user, loading, isVerifyingInitial, 
-    signupMutation.isPending, loginMutation.isPending, 
-    isRefreshing, login, signup, logout
+        token, 
+        user, 
+        loading, 
+        isVerifyingInitial, 
+        signupMutation.isPending, loginMutation.isPending, 
+        isRefreshing,
+        login, 
+        signup, 
+        logout
   ]);
 
   return (
@@ -205,7 +228,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({
         onRedirectToLogin={() => {
           setShowSessionExpiredModal(false);
           navigate(ROUTES.LOGIN, { 
-            state: { from: returnPath, sessionExpired: true },
+           state: { 
+              message: "Your session has expired. Please log in again.",
+              returnTo: returnPath 
+            },
             replace: true 
           });
         }}

@@ -67,7 +67,7 @@ class PasswordResetTokens extends \yii\db\ActiveRecord
      /**
      * Finds a valid token by hash
      */
-    public static function findValidToken(string $token, string $selector)
+    public static function findValidResetToken(string $rawToken, string $selector)
     {
         $record = static::find()
             ->where(['pwdResetSelector' => $selector])
@@ -78,9 +78,11 @@ class PasswordResetTokens extends \yii\db\ActiveRecord
             return null;
         }
 
-        if (!hash_equals($record->pwdResetToken, hash('sha256', $token))) {
-            return null;
-        }
+        $hashedInput = hash('sha256', $rawToken);
+
+        if (!hash_equals($record->pwdResetToken, $hashedInput)) {
+        return null;
+    }
 
         return $record;
 }

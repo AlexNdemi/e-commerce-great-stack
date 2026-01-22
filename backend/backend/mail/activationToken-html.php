@@ -5,7 +5,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $user common\models\Users */
-/* @var $resetUrl string */
+/* @var $activationUrl string */
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,14 +28,12 @@ use yii\helpers\Html;
 <body>
     <div>
         <p>Hello <?= Html::encode($user->firstname) ?>,</p>
-        <p>You have requested a password reset. Please follow the link below to reset your password:</p>
-        <a href="<?= Html::encode($resetUrl) ?>" class="reset-link">
-            Reset Your Password
+        <p>Account Activation</p>
+        <a href="<?= Html::encode($activationtUrl) ?>" class="reset-link">
+            click to Activate your account.
         </a>
         <p>Or copy and paste this link into your browser:</p>
-        <p><?= Html::encode($resetUrl) ?></p>
-        <p><strong>This link will expire in 1 hour.</strong></p>
-        <p>Please ignore this email if you did not request a password change.</p>
+        <p><?= Html::encode($activationUrl) ?></p>
     </div>
 </body>
 </html>

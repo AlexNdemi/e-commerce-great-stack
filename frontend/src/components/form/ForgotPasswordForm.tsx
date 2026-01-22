@@ -6,6 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate} from 'react-router-dom';
 import { handleYiiErrors, getYiiErrorMessage } from '../../utils/YiiErrorHandler';
 import { useRequestResetPassword } from '../../hooks/api/useUserData';
+import { useLocation } from 'react-router-dom';
+import { useRateLimitTimer } from '../../hooks/useRateLimitTimer';
+import axios from 'axios';
 
 
 
@@ -19,6 +22,9 @@ const ForgotPasswordForm: FC = () => {
   const navigate = useNavigate();
   type FormValues = z.infer<typeof requestResetSchema>;
   
+  const { isLocked, displayText, startCooldown } = useRateLimitTimer('resend-activation', 60);
+
+
   const [generalError, setGeneralError] = useState<string | null>(null);
 
   const requestResetPasswordMutation= useRequestResetPassword();
@@ -30,20 +36,28 @@ const ForgotPasswordForm: FC = () => {
     resolver: zodResolver(requestResetSchema),
     mode: "onChange",
   });
+  const location = useLocation();
+    const successMessage = location.state?.message;
 
   const { register, control, handleSubmit, formState, setError } = form;
   const { errors,  isSubmitting } = formState;
-
   
   
   async function onSubmit(data: FormValues) {
     try {
       setGeneralError(null);
       await requestResetPasswordMutation.mutateAsync({email:data.email});
-      navigate('/forgot-password', { state: { email: data.email } });
+      navigate('/login', { 
+        state: { message: "An email has  been sent to you with instructions on how to reset your password.please check your email" } 
+      });
       
       
-    } catch (error) {
+    } catch (error:unknown) {
+      if (axios.isAxiosError(error) && error.response?.status === 429) {
+        const retryAfter = parseInt(error.response.headers['retry-after'] as string) || 60;
+        startCooldown(retryAfter);
+      }
+
       const handled = handleYiiErrors<FormValues>(
         error,
         setError,
@@ -64,6 +78,13 @@ const ForgotPasswordForm: FC = () => {
           request to reset your password
         </h1>
         <p>An email will be sent to you with instructions on how to reset your password</p>
+
+        {/* Success Message Display */}
+        {successMessage && (
+          <div className="mb-4 p-4 border border-green-200 rounded-lg">
+            <p className="text-green-700 text-sm font-medium">{successMessage}</p>
+          </div>
+        )}
 
         {/* General Error Message */}
         {generalError && (
@@ -99,10 +120,10 @@ const ForgotPasswordForm: FC = () => {
           <div>
             <button
               type="submit"
-              disabled={ isSubmitting}
+              disabled={ isSubmitting || isLocked}
               className="w-full bg-[#f68b1e] hover:bg-[#e07a0e] text-white rounded-lg px-6 py-3 font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[rgb(246,139,97)] transition-colors"
             >
-              {isSubmitting ? 'Sending...' : 'Send reset link'}
+              {isSubmitting ? 'Sending...' :isLocked ?displayText: 'Send reset link'}
             </button>
           </div>
         </form>

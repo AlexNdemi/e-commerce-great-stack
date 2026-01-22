@@ -95,16 +95,18 @@ body{
    
 
   }
+
+}
+@media(width >= 48rem){
   a[aria-current="page"]{
     border-bottom-width: 2px;
     border-color:var(--navlink-active);
-    color: var(--navlink-active);
+    
   }
 }
 
 a[aria-current="page"]{
-  border-bottom-width: 2px;
-  color:var(--navlink-active);
+  color: var(--navlink-active);
   text-shadow: 0.25px 0 0.1px, -0.25px 0 0.1px;
 }
 .no-scroll {

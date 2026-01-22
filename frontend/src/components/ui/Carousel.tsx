@@ -11,7 +11,7 @@ type CarouselProps={
 }
 
 export const Carousel = ({items }:CarouselProps) => {
-  const [showControls, setShowControls] = useState(true);
+const   [isHovered, setIsHovered] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -42,24 +42,24 @@ export const Carousel = ({items }:CarouselProps) => {
     scrollPosition < scrollRef.current.scrollWidth - scrollRef.current.offsetWidth - 10;
 
   return (
-    <div className="mb-12 bg-[var(--surfaceElementLight)] hidden md:block py-2">
+    <div className="mb-12 bg-[var(--surfaceElementLight)] hidden md:block py-2 px-1">
       <div 
         className="relative group"
-        onMouseEnter={() => setShowControls(true)}
-        onMouseLeave={() => setShowControls(false)}
-      >
-        {/* Left Arrow */}
-        {canScrollLeft && (
-          <button
-            onClick={() => scroll('left')}
-            className={`absolute left-0 top-1/2 rounded-[100vw] px-1 py-2 z-10 w-12 flex items-center justify-center bg-black/50 hover:bg-black/70 transition-all ${
-              showControls ? 'opacity-100' : 'opacity-0'
-            }`}
-            aria-label="Scroll left"
-          >
-            <ChevronLeft className="size-8 text-white" />
-          </button>
-        )}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+>
+  {/* Left Arrow */}
+  {canScrollLeft && (
+    <button
+      onClick={() => scroll('left')}
+      className={`absolute left-0 top-1/2 rounded-[100vw] px-1 py-2 z-10 w-12 flex items-center justify-center bg-black/50 hover:bg-black/70 transition-all transform -translate-y-1/2 ${
+        isHovered ? 'opacity-100' : 'opacity-0'
+      }`}
+      aria-label="Scroll left"
+    >
+      <ChevronLeft className="size-8 text-white" />
+    </button>
+  )}
 
         {/* Carousel Container */}
         <div
@@ -85,18 +85,17 @@ export const Carousel = ({items }:CarouselProps) => {
 </div>
 
         {/* Right Arrow */}
-        {canScrollRight && (
-          <button
-            onClick={() => scroll('right')}
-            className={`absolute right-0 top-1/2 rounded-[100vw] px-1 py-2 z-10 w-12 flex items-center justify-center bg-black/50 hover:bg-black/70 transition-all ${
-              showControls ? 'opacity-100' : 'opacity-0'
-            }`}
-            aria-label="Scroll right"
-          >
-            <ChevronRight 
-              className="size-8 text-white" />
-          </button>
-        )}
+      {canScrollRight && (
+       <button
+        onClick={() => scroll('right')}
+        className={`absolute right-0 top-1/2 rounded-[100vw] px-1 py-2 z-10 w-12 flex items-center justify-center bg-black/50 hover:bg-black/70 transition-all transform -translate-y-1/2 ${
+        isHovered ? 'opacity-100' : 'opacity-0'
+        }`}
+        aria-label="Scroll right"
+    >
+      <ChevronRight className="size-8 text-white" />
+    </button>
+  )}
       </div>
     </div>
   );

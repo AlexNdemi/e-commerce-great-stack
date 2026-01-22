@@ -1,9 +1,9 @@
 import {type FC} from 'react'
-import RequestResetPasswordForm from '../components/form/ResetPasswordForm'
+import ResetPasswordForm from '../components/form/ResetPasswordForm'
 
 const ResetPassword:FC = () => {
   return (
-    <RequestResetPasswordForm/>
+    <ResetPasswordForm/>
   )
 }
 
